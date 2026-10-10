@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "example_sim",
+  "date": "2026-10-10T00:14:45.622054+00:00",
+  "data_source": "simulation",
+  "csv_format_version": 2,
+  "surface": "simulated; no physical surface",
+  "battery_type": "none",
+  "pid_gains": {
+    "left": null,
+    "right": null
+  },
+  "notes": "SIMULATED DATA: invented readings. No garden, hardware, physics or PID model.",
+  "telemetry_hz": 10,
+  "duration_s": 30,
+  "expected_rows": 300,
+  "timebase": "esp32_boot_ms",
+  "esp32_t0_ms": 0,
+  "started_unix_s": 1791591285.622054,
+  "command_unit": "rad/s",
+  "calibration": {
+    "ticks_per_revolution_left": null,
+    "ticks_per_revolution_right": null,
+    "wheel_radius_left_m": null,
+    "wheel_radius_right_m": null,
+    "track_width_m": null
+  }
+}

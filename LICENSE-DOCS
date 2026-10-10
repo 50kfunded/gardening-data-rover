@@ -1,0 +1,22 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 50kfunded and contributors
+
+The original documentation and hardware plans in this repository, including
+README.md, CONTEXT.md, CHANGELOG.md, all original Markdown documentation,
+hardware diagrams, and the wholly simulated example dataset in data/sample/,
+are licensed under the Creative Commons Attribution 4.0 International License.
+
+The full applicable legal code is:
+https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+The human-readable summary is:
+https://creativecommons.org/licenses/by/4.0/
+
+Attribute the material to "50kfunded and contributors, gardening-data-rover",
+link to https://github.com/50kfunded/gardening-data-rover-clean and the licence,
+and indicate any changes.
+
+Software/source code is covered separately by the MIT licence in LICENSE.
+Third-party materials retain their own licences. Private real garden records,
+photos and consent information are not included in this licensing grant.
