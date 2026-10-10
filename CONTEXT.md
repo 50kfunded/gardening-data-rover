@@ -2,7 +2,7 @@
 
 ## What exists
 
-Only a laptop simulation is implemented. It generates 300 invented snapshots
+Only a computer simulation is implemented. It generates 300 invented snapshots
 over 30 virtual seconds at 10 Hz, writes CSV and JSON, and verifies them.
 the readings are SIMULATED DATA, not hardware or garden observations.
 

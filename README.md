@@ -2,7 +2,7 @@ I'm building a small ESP32 and Raspberry Pi rover to test driving, sensor loggin
 
 ## Current status
 
-**Only the laptop simulation exists. No hardware has been built.**
+**Only the computer simulation exists. No hardware has been built.**
 The Pi code and ESP32 firmware have not started. None of the hardware milestones
 1–8 have passed, and Pi setup milestone 0 has not passed either. There is no
 working garden rover, camera capture, dashboard, PID controller or AI model yet.
@@ -12,7 +12,7 @@ checked 300 invented rows. The reorganised one-command check also passes.
 These results test files and parsing, not motors, sensors, UART or real timing.
 
 **all example readings and the committed sample are SIMULATED DATA.** They
-were invented on a laptop, not collected from a real garden.
+were invented on a computer, not collected from a real garden.
 
 ## The data format
 

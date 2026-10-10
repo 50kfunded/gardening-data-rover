@@ -6,7 +6,7 @@ the next one starts.
 
 ## The first software step
 
-**S0: Make and inspect a simulated run on the laptop. Passed on 9 October 2026.**
+**S0: Make and inspect a simulated run on the computer. Passed on 9 October 2026.**
 
 Run `python -m simulation.simulate_run`, then the verification command it prints. The
 pass is 300 valid rows with the agreed 11 columns, timestamps 100 ms apart,
@@ -38,7 +38,7 @@ These are planned tests. None have passed yet.
 
 | Step | What I will build | What counts as a pass |
 | --- | --- | --- |
-| 0 | Set up Raspberry Pi OS Lite, WiFi, SSH and UART with the serial console disabled | SSH into the Pi from the laptop |
+| 0 | Set up Raspberry Pi OS Lite, WiFi, SSH and UART with the serial console disabled | SSH into the Pi from the computer |
 | 1 | Make a small PlatformIO project for the exact ESP32 board | See an increasing counter over USB serial |
 | 2 | Connect the motor driver and test each motor at three PWM levels | Both wheels turn forwards and backwards as commanded; record any direction correction |
 | 3 | Count encoder pulses with interrupts | Several full turns by hand give a consistent count per wheel revolution; record both counts |

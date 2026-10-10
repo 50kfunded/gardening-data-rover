@@ -1,6 +1,6 @@
 # How the prototypes could progress
 
-**Planning only.** Only the laptop simulation exists. No hardware milestone
+**Planning only.** Only the computer simulation exists. No hardware milestone
 has passed; the proposed dates and fleet sizes below are not achieved results.
 
 I want to build one useful rover first, then improve the parts that limit the
@@ -13,7 +13,7 @@ The month ranges are elapsed time from starting preparation, not deadlines.
 Parts availability, weather and failed tests can move them. A stage starts when its
 prerequisites pass. Collecting another season of data takes calendar time.
 
-S0, the laptop simulation, has passed. S1, choosing three repeatable garden
+S0, the computer simulation, has passed. S1, choosing three repeatable garden
 spots, is pending. No real rover, garden dataset or AI model has passed yet.
 The original hardware milestones still happen one at a time.
 
@@ -21,7 +21,7 @@ The original hardware milestones still happen one at a time.
 
 | Stage | Approximate window | Main change | Collection scale to investigate |
 | --- | --- | --- | --- |
-| Preparation | Now to week 4 | Agree the observations, prepare the software and order parts when the buying checks are complete | One laptop; no fabricated readings counted as real training data |
+| Preparation | Now to week 4 | Agree the observations, prepare the software and order parts when the buying checks are complete | One computer; no fabricated readings counted as real training data |
 | Prototype 1 | Months 2-3 | Build the instrumented rover: closed-loop driving, sensors, CSV and stopped photos | One rover, one garden, initially three observation spots |
 | Prototype 2 | Months 3-5 | Make repeated garden visits useful: consistent photos, calibrated soil observations, visit notes and a dashboard | The same rover, one garden, roughly 8-12 subjects if access and time allow |
 | Prototype 3 | Months 5-8 | Test automatic probe placement and more reliable movement along a supervised garden route | One or two rovers visiting two or three consenting gardens |

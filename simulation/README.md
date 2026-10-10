@@ -1,7 +1,7 @@
-# Laptop simulation
+# Computer simulation
 
 All readings here are simulated. The generator invents messages immediately;
-30 simulated seconds do not take 30 seconds on the laptop. This is a file and
+30 simulated seconds do not take 30 seconds on the computer. This is a file and
 parser exercise, with no physics model, hardware, PID or live UART connection.
 
 Run modules from the repository root so Python can find `shared/` and `analysis/`:

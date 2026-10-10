@@ -64,7 +64,7 @@ def main():
     print("PASS: damaged files and false hardware labels are rejected; missing readings stay missing.")
     print("Checking the committed SIMULATED example:")
     verify(PROJECT_DIR / "data" / "sample" / "example_sim")
-    print("PASS: laptop simulation checks only. No hardware milestone has passed.")
+    print("PASS: computer simulation checks only. No hardware milestone has passed.")
 
 
 if __name__ == "__main__":

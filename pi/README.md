@@ -1,7 +1,7 @@
 # Raspberry Pi code
 
 Not started. There is no Pi UART logger, camera script or dashboard here yet.
-Only the laptop simulation runs at the moment.
+Only the computer simulation runs at the moment.
 
 The future Pi logger will import the same contract as the simulation:
 

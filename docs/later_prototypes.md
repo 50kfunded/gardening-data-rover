@@ -1,6 +1,6 @@
 # Photos, video and later soil sampling
 
-**Future design notes.** Only the laptop simulation exists and its readings
+**Future design notes.** Only the computer simulation exists and its readings
 are invented. No rover photos, videos or physical soil samples have been collected.
 
 I want the rover to show how the garden changes over time. Photos and soil
@@ -46,7 +46,7 @@ loss and check that the sensor log is complete. Resolution, frame rate and
 compression can then be chosen from the results. No 1080p/30 recording
 performance is promised for the combined system.
 
-For gradual plant changes, I can make a time-lapse on the laptop from dated
+For gradual plant changes, I can make a time-lapse on the computer from dated
 photos. That is a useful first video result without continuous recording
 on the rover. The first build has no wildlife detection or live video feed.
 

@@ -12,7 +12,7 @@ Use these names:
 
 | Tag | Meaning |
 | --- | --- |
-| `v0.0.1-sim` | Optional laptop simulation checkpoint; no hardware result |
+| `v0.0.1-sim` | Optional computer simulation checkpoint; no hardware result |
 | `p1-m0` through `p1-m8` | The matching actual setup/build milestone has passed |
 | `v1.0.0` | Only after the complete Prototype 1 definition of done is met |
 

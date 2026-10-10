@@ -2,7 +2,7 @@
 
 Use the [public Issues page](https://github.com/50kfunded/gardening-data-rover/issues)
 to track steps 0–8.
-None of the hardware pass tests have passed. The laptop simulation check passes.
+None of the hardware pass tests have passed. The computer simulation check passes.
 
 0 is Pi setup, followed by build milestones 1–8: nine issues in total.
 

@@ -4,9 +4,9 @@
 
 - Updated the repository links to `gardening-data-rover`.
 - Linked the Prototype 1 board directly and recorded that the source is public.
-- Only the laptop simulation exists; all hardware pass tests remain pending.
+- Only the computer simulation exists; all hardware pass tests remain pending.
 
-## 2026-10-10: Laptop simulation snapshot
+## 2026-10-10: Computer simulation snapshot
 
 - Organised the fake ESP32, generator and verifier in `simulation/`.
 - Kept the telemetry contract in `shared/` for simulation and future Pi imports.
@@ -19,6 +19,6 @@
 - Expanded ignores for credentials, photos, datasets and environments.
 - Chose MIT for code and CC BY 4.0 for original docs, plans and the simulated sample.
 
-Only the laptop simulation exists. No hardware was built, no real measurements
+Only the computer simulation exists. No hardware was built, no real measurements
 were collected and no AI model was trained. The check passes with 300 simulated
 rows, 11 columns and 100 ms virtual intervals. Hardware steps 0–8 are pending.

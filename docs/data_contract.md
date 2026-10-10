@@ -2,7 +2,7 @@
 
 This records what each number means, its unit and what to save if a reading
 is missing. **All data currently produced by this project is simulated.**
-The laptop simulation uses the same CSV columns planned for the Pi logger.
+The computer simulation uses the same CSV columns planned for the Pi logger.
 The real firmware and serial connection will come later.
 
 The contract lives in `shared/data_format.py`, imported by both the simulation
@@ -113,7 +113,7 @@ and [the ESP32 technical reference manual](https://documentation.espressif.com/e
 The hardware `t_ms` is elapsed boot time, not a date. On a real Pi we will
 record a start-time anchor to relate it to UTC photo times and measure the
 alignment error. `date` and `started_unix_s` in this simulation describe when
-the laptop generated the files; they are not a hardware clock synchronisation.
+the computer generated the files; they are not a hardware clock synchronisation.
 The virtual clock begins at zero; samples are 100, 200, ..., 30000 ms.
 
 A hardware run must not silently continue through an ESP32 reboot, counter
