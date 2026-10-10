@@ -1,22 +1,22 @@
-# the data format, version 1
+# The data format, version 1
 
-this records what each number means, its unit and what to save if a reading
-is missing. **all data currently produced by this project is simulated.**
-the laptop simulation uses the same CSV columns planned for the Pi logger.
-the real firmware and serial connection will come later.
+This records what each number means, its unit and what to save if a reading
+is missing. **All data currently produced by this project is simulated.**
+The laptop simulation uses the same CSV columns planned for the Pi logger.
+The real firmware and serial connection will come later.
 
-the contract lives in `shared/data_format.py`, imported by both the simulation
-and the future Pi code. the demo's 30-second length lives in `simulation/settings.py`.
+The contract lives in `shared/data_format.py`, imported by both the simulation
+and the future Pi code. The demo's 30-second length lives in `simulation/settings.py`.
 
-new simulated CSV files have this first line, followed by the column header:
+New simulated CSV files have this first line, followed by the column header:
 
 ```text
 # SIMULATED DATA: invented readings; no hardware or real garden measurements.
 ```
 
-`csv_format_version: 2` records that extra notice line. schema version 1 still
+`csv_format_version: 2` records that extra notice line. Schema version 1 still
 describes the same 11 telemetry fields. `analysis/read_run.py` reads the notice
-before parsing the CSV. with pandas later, use `comment="#"`. old local S0 runs
+before parsing the CSV. With pandas later, use `comment="#"`. Old local S0 runs
 use CSV format 1 and are accepted only with their simulation metadata; the
 checker warns that those CSV files are not labelled on their own.
 
@@ -53,7 +53,7 @@ rotation. A command's sign alone does not establish the actual wheel direction
 while coasting or changing direction. Keep these raw counts; do not claim
 signed distance from them without explaining a direction assumption.
 
-## the messages
+## The messages
 
 The proposed ESP32-to-Pi line includes the active commands so we do not mistake
 the last command sent by the Pi for one actually accepted by the ESP32:
@@ -63,7 +63,7 @@ T,t_ms,cmd_left,cmd_right,enc_left,enc_right,gyro_z,accel_x,accel_y,soil_raw,tem
 T,1000,6.283185,6.283185,20,18,0.0100,0.0200,0.0000,1800,21.50,48.00
 ```
 
-the numeric line above is a **simulated example**, not a hardware reading.
+The numeric line above is a **simulated example**, not a hardware reading.
 The first line above explains the fields; it is not sent as telemetry. Actual
 telemetry lines start with `T,`, use ASCII, end with a newline, and have exactly
 11 values. The CSV has the same fields without the `T` prefix. Messages must
@@ -94,7 +94,7 @@ counts, non-numeric text, NaN, infinity, negative pulse counts, out-of-range ADC
 values, and humidity outside 0..100. This checks structure and basic values;
 it cannot detect every corruption that still looks like a valid number.
 
-## sampling and time
+## Sampling and time
 
 The planned control loop is 100 Hz: one update every 0.01 s. Start telemetry
 at **10 Hz**: one saved snapshot every 0.1 s. A control update does not have to
@@ -121,7 +121,7 @@ reset or a 32-bit millisecond rollover (about 49.7 days). We will split or
 explicitly handle these events when implementing the live UART logger. S0's
 checker expects an uninterrupted, perfectly spaced simulation only.
 
-## the run notes and measurements needed later
+## The run notes and measurements needed later
 
 `meta.json` includes the required `run_id`, `date`, `surface`, `battery_type`,
 `pid_gains`, and `notes`, plus schema version, data source, sampling settings,
@@ -152,7 +152,7 @@ seconds to avoid collisions when needed. No pictures are made in S0. When we
 implement capture, we will distinguish the recorded capture time from the
 camera's actual exposure time, which is not guaranteed by a filename alone.
 
-## the maths for this step
+## The maths for this step
 
 At 10 samples per second, the interval is dt = 1/10 = 0.1 seconds. Over 30
 seconds we expect 30 * 10 = 300 rows. The header is not a data row.
