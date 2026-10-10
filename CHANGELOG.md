@@ -1,5 +1,12 @@
 # Changes
 
+## 2026-10-10: Radxa parts plan
+
+- Changed the logic board plan to Radxa ZERO 3W and updated the cables and bench items.
+- Recorded the board as bought for £44 including shipping, with testing still pending.
+- Kept the remaining prices as estimates and added the mounting and heatsink questions.
+- Only the computer simulation runs. No rover has been built, and hardware steps 0–8 are pending.
+
 ## 2026-10-10: Project links
 
 - Updated the repository links to `gardening-data-rover`.

@@ -1,10 +1,10 @@
-I'm building a small ESP32 and Raspberry Pi rover to test driving, sensor logging and timestamped garden photos.
+I'm building a small ESP32 and Radxa ZERO 3W rover to test driving, sensor logging and timestamped garden photos.
 
 ## Current status
 
-**Only the computer simulation exists. No hardware has been built.**
-The Pi code and ESP32 firmware have not started. None of the hardware milestones
-1–8 have passed, and Pi setup milestone 0 has not passed either. There is no
+**Only the computer simulation runs. I've bought the Radxa board, but no rover has been built or hardware tested.**
+The logic board code and ESP32 firmware have not started. None of the hardware milestones
+1–8 have passed, and board setup milestone 0 has not passed either. There is no
 working garden rover, camera capture, dashboard, PID controller or AI model yet.
 
 The separate software step, S0, passed on 9 October 2026: Python generated and
@@ -89,35 +89,59 @@ The checker warns when the standalone simulation notice is absent.
 
 ## Planned parts
 
-These approximate ranges come from the original brief. **They are unverified
-planning estimates, not current shop quotes or a confirmed build cost.**
-The original aim is roughly £100, with tools and extras depending on what is available.
+I've bought the Radxa board for £44 including shipping. **The other figures are
+unverified planning estimates, not current shop quotes or a confirmed build cost.**
+The original aim was roughly £100. The other parts are still planned, and the
+C920 is already owned.
 
-| Part | Approximate allowance |
+| Part | Cost or planning allowance |
 | --- | --- |
-| Raspberry Pi Zero 2 W, WH with soldered header | £16–22 |
+| Radxa ZERO 3W, planned configuration: 2 GB, soldered header, no eMMC | £44 paid, including shipping; bought, not tested |
 | 32 GB A1 microSD | £6–8 |
-| Micro-USB OTG adapter | £2–3 |
+| USB microSD reader | £5–15 |
+| Two data-capable USB-C male to USB-A female adapters, webcam and keyboard | £4–8 for both |
+| USB-A to USB-C power cable, power bank to Radxa USB-C 1 | £3–5 |
+| Micro-HDMI (type D) to HDMI cable | £4–8 |
+| USB keyboard | Borrow if possible; purchase price not estimated |
+| Small heatsink for the Radxa | £2–5; fit not verified |
+| Inline USB power meter | About £8 |
 | ESP32 DevKit, ESP32-WROOM-32 | £5–8 |
+| Data-capable ESP32 USB cable, matching its connector | Not priced yet; check micro-USB or USB-C |
 | 2WD chassis, two 1:48 motors, wheels, caster, encoder discs, 4xAA holder | £10–20 |
 | Two LM393 speed sensors, if not included | £2–4 |
 | TB6612FNG driver module | £3–5 |
 | MPU6050 IMU module | £2–4 |
 | BME280 module | £3–6 |
 | Capacitive soil moisture sensor | £2–4 |
-| 10,000 mAh USB power bank, at least 2 A output | £10–15 |
+| 10,000 mAh USB power bank, at least 5 V / 2 A on the Radxa output, ideally two outputs for separate ESP32 power | £10–15 |
 | Four AA NiMH cells and charger | £10–15 |
-| Breadboard, jumpers, 100 µF capacitor, Velcro and zip ties | £8–12 |
+| Breadboard, mostly female-to-female jumpers, 100 µF capacitor, Velcro and zip ties | £8–12 |
+| 5 V / 3 A USB bench supply | £6–15; Radxa recommends its Power PD30W adapter, whose price is not verified here |
 | Multimeter, optional | £8–12 |
+| 3.3 V USB-serial adapter supporting 1,500,000 baud, optional first-boot fallback | £5–10 |
 | Logitech C920 webcam | Already owned |
 
-A USB microSD reader, soldering equipment, cables and secure mounting may add
-to this. [The parts list](hardware/parts.md) includes buying checks and those
-extra allowances. No basket, seller stock or delivery price is confirmed here.
+**Rough estimate for the priced, non-optional rows, including the bought board: about £140–210.**
+The £44 board cost and remaining allowances add up to £137–209 before rounding.
+This assumes a borrowed keyboard, the existing C920 and separate LM393 modules.
+It excludes the optional
+multimeter and USB-serial adapter, the unpriced ESP32 cable, soldering supplies,
+any extra mounting parts and delivery on the remaining orders. The board's
+shipping is already included. It is not a confirmed total.
+
+The USB-C adapters must carry data, and the HDMI cable must be micro-HDMI
+(type D). Most jumpers will be female-to-female because the Radxa and ESP32
+headers are male pins. I won't buy a powered USB hub unless the C920 misbehaves
+on USB-C 2. [The parts list](hardware/parts.md) has the rest of the buying checks.
+No seller stock or delivery price is confirmed here.
 
 ## Proposed wiring
 
 **Untested: check the actual module labels before connecting power.**
+
+This section and the linked wiring document still describe the earlier Raspberry
+Pi plan. They need a Radxa update before I use them to connect anything. The Pi
+power and UART connections below do not apply to the Radxa.
 
 | Connection | Planned pins |
 | --- | --- |
@@ -144,9 +168,10 @@ Nothing has been assembled or stability-tested yet.
 
 - The cheap single-channel encoders have low resolution and cannot independently
   measure direction. Measure ticks per revolution; do not assume 20 is correct.
-- The Pi Zero 2 W has 512 MB RAM. Capture and logging are planned for the Pi;
-  heavier image analysis and training belong on a computer.
-- The webcam uses the Pi's only USB data port, so the planned ESP32 link is UART.
+- The planned logic board is a 2 GB Radxa ZERO 3W. Capture and logging are planned
+  for that board; heavier image analysis and training belong on a computer.
+- The C920 is planned for USB-C 2 through a data adapter. The ESP32 link is UART;
+  the Radxa setup and power checks still need testing.
 - Motors need their separate AA supply. Loose breadboard connections need
   securing before driving.
 - The small 2WD chassis has no proven grass, slope, weather or obstacle capability.
@@ -159,7 +184,7 @@ Nothing has been assembled or stability-tested yet.
 
 ## Short roadmap
 
-1. Finish software preparation, then pass Pi setup and the hardware milestones
+1. Finish software preparation, then pass board setup and the hardware milestones
    one at a time: hello, motors, encoders, PID, sensors, UART, camera and combined run.
 2. After real tests pass, collect repeatable supervised observations with manual
    probe placement, calibration and reviewed labels.
@@ -179,8 +204,8 @@ track the build. [Release notes](docs/releases.md) explain tagging after a pass.
 | Folder / file | Purpose now |
 | --- | --- |
 | `firmware/` | ESP32 placeholder; not started |
-| `pi/` | Pi placeholder; not started |
-| `shared/` | Telemetry contract for simulation and future Pi imports |
+| `pi/` | Existing logic board placeholder; not started |
+| `shared/` | Telemetry contract for simulation and the future logger |
 | `simulation/` | Fake ESP32, run generator, verifier and one-command check |
 | `analysis/` | Reads and summarises simulated saved files; no AI yet |
 | `hardware/` | Proposed parts and wiring |

@@ -7,8 +7,13 @@ over 30 virtual seconds at 10 Hz, writes CSV and JSON, and verifies them.
 the readings are SIMULATED DATA, not hardware or garden observations.
 
 S0, the software preparation step, passed on 9 October 2026. The reorganised
-check passes too. Pi setup (0) and hardware steps 1–8 are all pending.
-Firmware, the Pi logger/camera code, PID, Kalman filtering and AI are not started.
+check passes too. Board setup (0) and hardware steps 1–8 are all pending.
+Firmware, the logic board logger/camera code, PID, Kalman filtering and AI are not started.
+
+The Radxa ZERO 3W has been bought for £44 including shipping. It has not been
+tested, and no rover has been built. The other parts are still planned, apart
+from the already-owned C920. See [the parts list](hardware/parts.md) and
+[logic board plan](docs/logic_board.md).
 
 ## Folder roles
 
@@ -26,8 +31,8 @@ used for verification; no third-party Python packages are required.
 ## Planned architecture
 
 ESP32-WROOM-32 handles motors, encoder interrupts and sensors with a 100 Hz
-control loop. Pi Zero 2 W handles UART logging, drive commands and a USB C920
-camera. UART is proposed at 115200 baud with text lines. Telemetry begins at
+control loop. Radxa ZERO 3W is planned for UART logging, drive commands and a USB
+C920 camera. UART is proposed at 115200 baud with text lines. Telemetry begins at
 10 Hz, separately from the control update rate.
 
 Wheel command units are rad/s. Encoder values are raw cumulative counts,
@@ -36,8 +41,9 @@ Unavailable sensor fields stay blank and unknown calibration stays `null`.
 See [the contract](docs/data_contract.md) before changing a field or unit.
 
 Motor power is a separate AA pack; the logic/camera power bank shares ground.
-The Pi's one USB data port is for the camera. Proposed GPIO assignments are
-in [hardware/wiring.md](hardware/wiring.md), not an as-built record.
+The camera is planned for the Radxa's USB-C 2 through a data-capable adapter.
+The existing [wiring document](hardware/wiring.md) still has the earlier Pi
+connections and needs a Radxa update before use.
 
 ## Boundaries for the first build
 
