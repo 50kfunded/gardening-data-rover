@@ -87,8 +87,8 @@ all hardware steps pass, the code and a checked wiring diagram are on
 GitHub, and there is a two-minute demo video. i can explain what PID does
 and what a Kalman filter could add in the next phase.
 
-the repo is private while preparing. there is no finished wiring diagram,
-physical build, demo video or trained AI model yet.
+the source, plans and simulated sample are public. there is no finished wiring
+diagram, physical build, demo video or trained AI model yet.
 
 ## ideas after prototype 1
 

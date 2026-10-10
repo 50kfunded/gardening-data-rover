@@ -197,7 +197,7 @@ sample dataset are CC BY 4.0; keep attribution and state changes.
 materials keep their own licences. real private garden data is not included
 or automatically licensed by this project.
 
-the repository stays private while preparing. do not add credentials, raw
-photos or identifiable records to Git. use the [publication checklist](docs/publication.md)
-before sharing a source snapshot. keep local runs and recordings outside the
-published source.
+the repository is public and contains source, plans and a labelled simulated
+sample. do not add credentials, raw photos or identifiable records to Git.
+use the [publication checklist](docs/publication.md) before sharing new material.
+keep local runs and recordings outside the published source.

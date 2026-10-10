@@ -1,5 +1,11 @@
 # changes
 
+## 2026-10-10 — project links
+
+- updated the repository links to `gardening-data-rover`.
+- linked the prototype 1 board directly and recorded that the source is public.
+- only the laptop simulation exists; all hardware pass tests remain pending.
+
 ## 2026-10-10 — laptop simulation snapshot
 
 - organised the fake ESP32, generator and verifier in `simulation/`.
