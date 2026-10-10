@@ -171,7 +171,7 @@ Nothing has been assembled or stability-tested yet.
 and [later attachments](docs/later_prototypes.md) describe proposed work.
 Dates, fleet sizes and model dataset counts there are planning targets, not results.
 
-[Nine pending milestone issues and the private project board](docs/tracking.md)
+[The nine pending milestone issues](https://github.com/50kfunded/gardening-data-rover/issues)
 track the build. [Release notes](docs/releases.md) explain tagging after a pass.
 
 ## Where things live

@@ -1,8 +1,7 @@
 # Tracking Prototype 1
 
-Use the [repository issues](https://github.com/50kfunded/gardening-data-rover/issues)
-and [project board](https://github.com/users/50kfunded/projects/2)
-to track steps 0–8. The board uses **Todo → In Progress → Done**.
+Use the [public Issues page](https://github.com/50kfunded/gardening-data-rover/issues)
+to track steps 0–8.
 None of the hardware pass tests have passed. The laptop simulation check passes.
 
 0 is Pi setup, followed by build milestones 1–8: nine issues in total.
@@ -19,11 +18,10 @@ None of the hardware pass tests have passed. The laptop simulation check passes.
 | 7 | [Capture C920 photos](https://github.com/50kfunded/gardening-data-rover/issues/8) | 20 timestamped photos without motion blur |
 | 8 | [Complete a combined run](https://github.com/50kfunded/gardening-data-rover/issues/9) | Five unattended indoor drive/stop/photo/log cycles; complete folder |
 
-Keep every hardware issue in Todo until work begins. Move it to Done only after
+Keep each hardware issue open while work is pending. Close it only after
 recording the actual pass evidence. Do not close an issue for a simulation result.
 
 Soil insertion is manual in Prototype 1. The combined run does not establish
 automatic soil sampling. Readings without valid soil contact stay missing.
 
-Project visibility is controlled separately from repository visibility.
 See [release tagging](releases.md) after a real milestone passes.
