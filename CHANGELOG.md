@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-11: USB host power proposal
+
+- Added my proposed Radxa-host power fix for the Nucleo, with a hub for the C920.
+- Recorded the published host budget, USB configuration limits, source links and open questions.
+- Added an optional hub to the parts plan and later bench checks for current, enumeration and bank stay-on.
+- Kept the wiring diagram, pin table, protocol and metadata schema unchanged.
+- Everything in this proposal is planned and untested. No hardware milestone has passed.
+
 ## 2026-10-11: Controller metadata and power research
 
 - Renamed boot-time metadata to controller names and bumped metadata schema version to 2.

@@ -34,6 +34,7 @@ the amount.
 | 5 V / 3 A USB bench supply | £6–15 | Radxa recommends its Power PD30W adapter. This allowance is not a verified price for that model |
 | Multimeter, optional but useful | £8–12 | Continuity and voltage ranges |
 | DSD TECH SH-U09C5 or suitable 3.3 V USB-serial adapter, optional Radxa console fallback | £5–10 planning allowance, exact price unconfirmed | Verify 1,500,000 baud and TX logic voltage; power wire disconnected. Not needed for the Nucleo VCP |
+| Small USB data hub, optional, type still to be decided | Not bought. Example seen: [TP-Link UH400 at Argos](https://www.argos.co.uk/product/8519294), £8.99 on 11 October 2026; delivery and local stock not shown | Decide after milestone 0 current checks. Bus-powered hub, C920 and Nucleo would share the Radxa's published 500 mA host budget; USB configuration and power still need testing. A powered hub needs a verified supply and upstream isolation. See [the untested proposal](../docs/power_plan.md#my-proposed-usb-host-fix) |
 | Logitech C920 webcam | Already owned | Test USB capture on the Radxa's USB-C 2 later |
 
 **Rough planning subtotal for the other priced, non-optional rows: £132–201,
@@ -41,7 +42,7 @@ including the £44 Radxa. Add the Nucleo invoice total once it is confirmed.**
 The Nucleo listing was £11.98 ex VAT; its VAT-inclusive total and delivery are
 not confirmed here. I am not treating that listing as a delivered price.
 This subtotal assumes a borrowed keyboard, the existing C920 and separate
-LM393 modules. It excludes the optional multimeter and USB-serial adapter,
+LM393 modules. It excludes the optional multimeter, USB-serial adapter and hub,
 the unpriced Micro-B cable, soldering supplies, extra mounting parts and
 delivery on the remaining orders. The Radxa shipping is already included.
 This is a planning allowance, not a confirmed whole-build total.
@@ -68,16 +69,20 @@ Low-cost modules can have different pin layouts or substitute chips. A cheaper
 listing is not automatically the correct part, and old prices do not show
 present stock or delivery costs. Confirm the final basket before spending.
 
-The USB-C adapters must carry data. The HDMI cable must be micro-HDMI (type D),
-not mini-HDMI. I won't buy a powered USB hub unless the C920 misbehaves on
-USB-C 2. Radxa recommends its Power PD30W in the
+The USB-C adapters and any hub must carry data. The HDMI cable must be
+micro-HDMI (type D), not mini-HDMI. I haven't chosen or bought a hub. First
+measure the C920 and Nucleo, then check the shared USB budget and enumeration.
+The [USB host power proposal](../docs/power_plan.md#my-proposed-usb-host-fix)
+compares bus-powered and externally powered options. Radxa recommends its Power PD30W in the
 [preparation guide](https://docs.radxa.com/en/zero/zero3/getting-started/preparation).
 
 I won't assume the Radxa's mounting holes match a Pi Zero. Mounting hole spacing
 and heatsink fit still need checking; see the [logic board plan](../docs/logic_board.md).
 
-The power bank feeds the Radxa through USB-C 1, with a separate USB lead for the
-Nucleo at first. Check its standalone USB power-source selection on the
+The power bank feeds the Radxa through USB-C 1. The first Nucleo counter test
+uses computer USB. Powering it from the Radxa through a hub is a later,
+untested bench proposal; a separate bank lead needs a verified standalone
+power selection. Check its USB power-source selection on the
 actual board revision before moving any jumper; the manual uses inconsistent
 JP2/JP5 names. The AA pack powers only the motors through the driver, with a
 shared ground. The [planned wiring](wiring.md) now records the Radxa power
