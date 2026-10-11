@@ -12,7 +12,7 @@ from shared.data_format import (
     COLUMNS, SCHEMA_VERSION, SIMULATION_NOTICE, TELEMETRY_HZ,
     parse_telemetry,
 )
-from simulation.fake_esp32 import telemetry_lines
+from simulation.fake_controller import telemetry_lines
 from simulation.settings import DURATION_S, SAMPLE_COUNT
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]

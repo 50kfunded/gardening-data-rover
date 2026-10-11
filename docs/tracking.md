@@ -10,7 +10,7 @@ The computer simulation check passes.
 | Step | GitHub issue | Pass test |
 | --- | --- | --- |
 | 0 | [Set up the Radxa ZERO 3W](https://github.com/50kfunded/gardening-data-rover/issues/1) | SSH into the actual Radxa and record the serial, header voltage, C920 current, power bank and headless WiFi checks before wiring |
-| 1 | [Print an ESP32 counter](https://github.com/50kfunded/gardening-data-rover/issues/2) | Increasing counter visible over USB serial |
+| 1 | [Print a Nucleo counter](https://github.com/50kfunded/gardening-data-rover/issues/2) | Increasing counter visible on the ST-LINK VCP at 115200 baud |
 | 2 | [Test both motors](https://github.com/50kfunded/gardening-data-rover/issues/3) | Forward/reverse at three PWM levels |
 | 3 | [Count encoder ticks](https://github.com/50kfunded/gardening-data-rover/issues/4) | Repeated full turns give consistent counts |
 | 4 | [Drive straight with PID](https://github.com/50kfunded/gardening-data-rover/issues/5) | 2 m within 10 cm, three consecutive runs |

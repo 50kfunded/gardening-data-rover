@@ -1,18 +1,29 @@
 # Changes
 
+## 2026-10-11: Nucleo controller plan
+
+- Changed the planned real-time controller to NUCLEO-G474RE; Radxa ZERO 3W stays the logic board.
+- Recorded the Anglia order at £11.98 ex VAT, with the invoice total unconfirmed and hardware untested.
+- Built the counter for Arduino and ST-LINK, checking the core's virtual COM port mapping.
+- Added a proposed pin plan, separate USB power checks and mixed jumper types.
+- Kept single-pulse encoder interrupts first; timer counting and magnetic quadrature are a later milestone.
+- Updated PC testing and the milestone issues for the Nucleo and Radxa.
+- The simulation, logger and eight native protocol tests pass on the computer. No hardware milestone has passed.
+- Kept the protocol, CSV columns and legacy metadata names unchanged.
+
 ## 2026-10-11: Software preparation
 
 - Added planned milestone 1 counter firmware and pure protocol helpers with native tests.
 - Added the serial logger, configurable port, reset splitting and D/STOP sender.
 - Tested serial input with simulated loopback and fake chunks, keeping missing cells empty.
-- Added setup and Windows adapter notes, plus protocol proposals awaiting approval.
+- Added setup and Windows virtual COM port notes, plus protocol proposals awaiting approval.
 - Kept the T line contract unchanged. No hardware milestone has passed.
 
 ## 2026-10-11: Radxa wiring plan
 
 - Updated the planned power and UART connections for Radxa ZERO 3W, including the diagram.
 - Added UART3-M0 and the UART4-M1/UART5-M1 fallbacks, with the serial device still unconfirmed.
-- Added milestone 0 checks before wiring and kept the ESP32 on its own USB lead.
+- Added milestone 0 checks before wiring and kept the controller on its own USB lead.
 - Updated the logic board code notes and related docs; the folder still stays `pi/`.
 - The computer simulation check passes. All wiring and hardware work remain planned and untested.
 
@@ -31,7 +42,7 @@
 
 ## 2026-10-10: Computer simulation snapshot
 
-- Organised the fake ESP32, generator and verifier in `simulation/`.
+- Organised the simulated controller, generator and verifier in `simulation/`.
 - Kept the telemetry contract in `shared/` for simulation and future logic board imports.
 - Added a file-reading pipeline in `analysis/`.
 - Added a clearly labelled simulated sample and `python -m simulation.check`.

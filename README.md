@@ -1,8 +1,11 @@
-I'm building a small ESP32 and Radxa ZERO 3W rover to test driving, sensor logging and timestamped garden photos.
+I'm building a small NUCLEO-G474RE and Radxa ZERO 3W rover to test driving, sensor logging and timestamped garden photos.
 
 ## Current status
 
-**Software preparation is tested on the computer only. I've bought the Radxa board, but no rover has been built or hardware tested.**
+**Software preparation is tested on the computer only. I've bought the Radxa
+and ordered the NUCLEO-G474RE, but no rover has been built or hardware tested.**
+The Nucleo was ordered from Anglia on 11 October 2026 at a listed £11.98 ex VAT.
+Its VAT-inclusive total is unconfirmed, and it has not arrived or been tested.
 Milestone 1 counter firmware builds, and the serial logger and command sender
 have only been tested with SIMULATED input. Hardware operation is planned and
 untested. None of the hardware milestones
@@ -23,7 +26,7 @@ The shared contract is [shared/data_format.py](shared/data_format.py).
 
 | CSV column | Meaning / unit |
 | --- | --- |
-| `t_ms` | Elapsed ESP32 boot time, ms; a virtual clock in the simulation |
+| `t_ms` | Elapsed Nucleo boot time, ms; a virtual clock in the simulation |
 | `cmd_left`, `cmd_right` | Requested wheel angular speeds, rad/s; not PWM or measured speed |
 | `enc_left`, `enc_right` | Cumulative raw encoder pulse counts |
 | `gyro_z` | Body Z angular velocity, rad/s |
@@ -101,22 +104,25 @@ After installing `requirements-dev.txt` in a virtual environment:
 ```powershell
 .\.venv\Scripts\python.exe -m pi.check
 .\.venv\Scripts\python.exe -m pi.demo
-.\.venv\Scripts\python.exe -m platformio run -d firmware -e esp32dev
+.\.venv\Scripts\python.exe -m platformio run -d firmware -e nucleo_g474re
 ```
 
 The demo saves 300 invented rows through `loop://`, clearly labelled simulation.
 It does not send anything to a board. [The firmware notes](firmware/README.md)
 and [logger notes](pi/README.md) explain what is prepared and still untested.
-The firmware only prints a USB counter; Serial2 is idle and no motors are used.
+The firmware only prints a counter through the ST-LINK virtual COM port.
+`Serial` maps to LPUART1 PA2/PA3 in the checked STM32duino core. USART1 for
+the Radxa remains uninitialised, and no motors or sensors are used.
 [Windows UART checks](docs/windows_uart.md) are for later hardware testing.
 [Protocol additions](docs/protocol_proposals.md) are proposals awaiting approval.
 
 ## Planned parts
 
-I've bought the Radxa board for £44 including shipping. **The other figures are
-unverified planning estimates, not current shop quotes or a confirmed build cost.**
-The original aim was roughly £100. The other parts are still planned, and the
-C920 is already owned.
+I've bought the Radxa board for £44 including shipping and ordered the Nucleo
+at a listed £11.98 ex VAT, with its invoice total still unconfirmed. **The other
+figures are unverified planning estimates, not current shop quotes or a confirmed
+build cost.** The original aim was roughly £100. The other parts are still
+planned, and the C920 is already owned.
 
 | Part | Cost or planning allowance |
 | --- | --- |
@@ -129,82 +135,94 @@ C920 is already owned.
 | USB keyboard | Borrow if possible; purchase price not estimated |
 | Small heatsink for the Radxa | £2–5; fit not verified |
 | Inline USB power meter | About £8 |
-| ESP32 DevKit, ESP32-WROOM-32 | £5–8 |
-| Data-capable ESP32 USB cable, matching its connector | Not priced yet; check micro-USB or USB-C |
+| ST NUCLEO-G474RE | Ordered 11 October 2026, £11.98 ex VAT listing; invoice total unconfirmed, not arrived or tested |
+| Data-capable Micro-B USB cable to Nucleo CN1 | Not priced yet; reuse a suitable cable if possible |
 | 2WD chassis, two 1:48 motors, wheels, caster, encoder discs, 4xAA holder | £10–20 |
 | Two LM393 speed sensors, if not included | £2–4 |
 | TB6612FNG driver module | £3–5 |
 | MPU6050 IMU module | £2–4 |
 | BME280 module | £3–6 |
 | Capacitive soil moisture sensor | £2–4 |
-| 10,000 mAh USB power bank, at least 5 V / 2 A on the Radxa output, ideally two outputs for separate ESP32 power | £10–15 |
+| 10,000 mAh USB power bank, at least 5 V / 2 A on the Radxa output, ideally two outputs for separate Nucleo power | £10–15 |
 | Four AA NiMH cells and charger | £10–15 |
-| Breadboard, mostly female-to-female jumpers, 100 µF capacitor, Velcro and zip ties | £8–12 |
+| Breadboard, mixed F-F/M-F/M-M jumpers, 100 µF capacitor, Velcro and zip ties | £8–12 |
 | 5 V / 3 A USB bench supply | £6–15; Radxa recommends its Power PD30W adapter, whose price is not verified here |
 | Multimeter, optional | £8–12 |
-| 3.3 V USB-serial adapter supporting 1,500,000 baud, optional first-boot fallback | £5–10 |
+| DSD TECH SH-U09C5 or suitable 3.3 V USB-serial adapter, optional Radxa console fallback | £5–10 allowance; verify 1,500,000 baud and logic voltage, not required for Nucleo |
 | Logitech C920 webcam | Already owned |
 
-**Rough estimate for the priced, non-optional rows, including the bought board: about £140–210.**
-The £44 board cost and remaining allowances add up to £137–209 before rounding.
-This assumes a borrowed keyboard, the existing C920 and separate LM393 modules.
-It excludes the optional
-multimeter and USB-serial adapter, the unpriced ESP32 cable, soldering supplies,
-any extra mounting parts and delivery on the remaining orders. The board's
-shipping is already included. It is not a confirmed total.
+**Rough planning subtotal for the other priced, non-optional rows: £132–201,
+including the £44 Radxa. Add the Nucleo invoice total once it is confirmed.**
+The Nucleo listing was £11.98 ex VAT; its VAT-inclusive total and delivery are
+not confirmed here. I am not treating that listing as a delivered price.
+This subtotal assumes a borrowed keyboard, the existing C920 and separate
+LM393 modules. It excludes the optional multimeter and USB-serial adapter,
+the unpriced Micro-B cable, soldering supplies, extra mounting parts and
+delivery on the remaining orders. The Radxa shipping is already included.
+This is a planning allowance, not a confirmed whole-build total.
 
-The USB-C adapters must carry data, and the HDMI cable must be micro-HDMI
-(type D). Most jumpers will be female-to-female because the Radxa and ESP32
-headers are male pins. I won't buy a powered USB hub unless the C920 misbehaves
-on USB-C 2. [The parts list](hardware/parts.md) has the rest of the buying checks.
-No seller stock or delivery price is confirmed here.
+The USB-C adapters must carry data, and HDMI must be micro-HDMI (type D).
+Use female-to-female jumpers for Radxa/morpho male pins and male-to-female
+for the Nucleo's Arduino sockets. The Micro-B cable serves the built-in
+ST-LINK programmer and virtual COM port; no separate PC serial adapter is
+required. I won't buy a powered USB hub unless the C920 misbehaves on USB-C 2.
+[The parts list](hardware/parts.md) has the buying and power checks.
+
 
 ## Proposed wiring
 
-**Planned and untested: check the actual module labels before connecting power.**
-
-The logic board is Radxa ZERO 3W. Its numbers below are physical header pins;
-the ESP32 numbers are GPIO numbers. TX crosses to the other board's RX.
+**Planned and untested. I will check each pin against ST's user manual and the
+actual board revision before wiring.** Nucleo D/A labels and MCU pin names
+are different from the Radxa's physical header pin numbers.
 
 | Connection | Planned pins |
 | --- | --- |
-| ESP32 → TB6612 | PWMA 25, AIN1 26, AIN2 27, PWMB 13, BIN1 32, BIN2 33, STBY 4 |
-| Driver supplies | VCC to ESP32 3V3; VM to AA positive; 100 µF across VM/GND |
-| Encoders | Left DO to GPIO34, right DO to GPIO35; VCC 3V3 |
-| Shared I2C | SDA GPIO21, SCL GPIO22; MPU6050 and BME280 at 3V3 |
-| Soil sensor | AO GPIO39, VCC 3V3 |
-| UART3-M0 | ESP32 TX2 GPIO17 → Radxa pin 3, UART3_RX_M0 |
-| UART3-M0 | ESP32 RX2 GPIO16 ← Radxa pin 5, UART3_TX_M0 |
-| UART ground | ESP32 GND ↔ Radxa pin 6 |
-| Logic power | Power bank output, at least 5 V / 2 A, → Radxa USB-C 1; ESP32 on its own USB lead |
+| Left driver PWM and direction | PWMA D12 / PA6, TIM3_CH1; AIN1 D6 / PB10; AIN2 D7 / PA8 |
+| Right driver PWM and direction | PWMB D9 / PC7, TIM3_CH2; BIN1 D8 / PA9; BIN2 D11 / PA7 |
+| Driver standby | STBY A2 / PA4, digital output |
+| Driver supplies | VCC to checked Nucleo 3V3; VM to AA positive; 100 µF across VM/GND |
+| Encoders | Left DO D2 / PA10; right DO D4 / PB5; checked 3.3 V supply and outputs |
+| Shared I2C | SDA D14 / PB9; SCL D15 / PB8; MPU6050 and BME280 at 3V3 |
+| Soil sensor | AO A0 / PA0, planned 12-bit ADC; check actual reference voltage |
+| Spare light input | A1 / PA1; sensor and circuit not chosen |
+| USART1 to UART3-M0 | Nucleo D1 / PC4 TX → Radxa pin 3, UART3_RX_M0 |
+| USART1 to UART3-M0 | Nucleo D0 / PC5 RX ← Radxa pin 5, UART3_TX_M0 |
+| UART ground | Nucleo GND CN6 pin 6 or 7 ↔ Radxa pin 6 |
+| Logic power | Bank output at least 5 V / 2 A → Radxa USB-C 1; Nucleo on its own Micro-B USB lead, power selection to check |
 | Camera | C920 → Radxa USB-C 2 through a data-capable USB-C to USB-A adapter |
-| First boot only | Micro-HDMI to a monitor; keyboard on USB-C 2 through an adapter, unplugged before connecting the C920 |
+| First boot only | Micro-HDMI to monitor; keyboard on USB-C 2 through an adapter, then unplug before the C920 |
 
-All grounds join together, including AA negative. The AA pack supplies the
-motors through the driver. GPIO34/35 have no internal pull-ups; check the
-encoder modules' outputs. Keep Radxa header pins 2/4 disconnected from the
-ESP32 until measured and the supply path is checked. Voltage alone does not
-establish available current or protection; the planned ESP32 supply is USB.
+All signal logic is 3.3 V; PA3 and PC5 are not 5 V tolerant. Reserve PA2/PA3
+for the ST-LINK VCP, PA13/PA14 for SWD and PB3 / D3 for SWO. Check sensor
+pull-ups and ADC voltage limits. All grounds join, including AA negative.
+The AA pack supplies only the motors through the driver.
 
-Use 3.3 V UART logic at 115200 baud, 8 data bits, no parity and one stop bit.
-Enable UART3-M0 through the `rsetup` overlays and reboot. `/dev/ttyS3` is expected
-but unconfirmed until checked on the board. Avoid Radxa pins 8/10, the UART2
-debug console, and pins 27/28. UART4-M1 and UART5-M1 fallbacks are listed in
-[the planned wiring](hardware/wiring.md). Do the
-[milestone 0 board checks](docs/plan.md#milestone-0-checks-before-wiring) before
-connecting the UART wires. Nothing in this wiring has passed a hardware test.
+The Nucleo gets one USB power source at a time. Standalone bank power still
+needs checking: ST's default USB path depends on enumeration, and the manual
+uses inconsistent JP2/JP5 names. Do not move a jumper before checking the
+schematic for the delivered revision. Keep Radxa header pins 2/4 disconnected
+from the Nucleo until measured and the supply path checked. Voltage alone
+does not establish available current or protection.
 
-[The full wiring plan](hardware/wiring.md) has motor outputs, capacitor polarity,
-ground pins, a diagram and the planned standoffs, straps and camera bracket.
+Use crossed TX/RX, 115200 baud, 8 data bits, no parity and one stop bit.
+Enable Radxa UART3-M0 through `rsetup` and reboot. `/dev/ttyS3` is expected
+but unconfirmed until checked. Avoid Radxa pins 8/10, the UART2 debug console,
+and 27/28. UART4-M1 and UART5-M1 fallbacks stay in
+[the full wiring plan](hardware/wiring.md), with connector positions, sources,
+a diagram and mounting checks. Do the
+[milestone 0 checks](docs/plan.md#milestone-0-checks-before-wiring) before connecting.
 Nothing has been assembled or stability-tested yet.
 
 ## Known limits
 
 - The cheap single-channel encoders have low resolution and cannot independently
-  measure direction. Measure ticks per revolution; do not assume 20 is correct.
+  measure direction. Count pulses with interrupts first. Command direction is
+  only an assumption during coasting or reversal. Measure ticks per revolution;
+  do not assume 20 is correct. Timer counting and magnetic quadrature need a
+  separate later milestone using HAL or LL; `HardwareTimer` has no encoder mode.
 - The planned logic board is a 2 GB Radxa ZERO 3W. Capture and logging are planned
   for that board; heavier image analysis and training belong on a computer.
-- The C920 is planned for USB-C 2 through a data adapter. The ESP32 link is UART;
+- The C920 is planned for USB-C 2 through a data adapter. The Nucleo link is UART;
   the Radxa setup and power checks still need testing.
 - Motors need their separate AA supply. Loose breadboard connections need
   securing before driving.
@@ -240,7 +258,7 @@ track the build. [Release notes](docs/releases.md) explain tagging after a pass.
 | `firmware/` | Planned USB counter firmware and computer-tested pure protocol functions |
 | `pi/` | Serial logger and command sender, tested only with simulated input |
 | `shared/` | Telemetry contract for simulation and the future logger |
-| `simulation/` | Fake ESP32, run generator, verifier and one-command check |
+| `simulation/` | Simulated controller, run generator, verifier and one-command check |
 | `analysis/` | Reads and summarises simulated saved files; no AI yet |
 | `hardware/` | Proposed parts and wiring |
 | `data/sample/` | Small, clearly labelled simulated example |

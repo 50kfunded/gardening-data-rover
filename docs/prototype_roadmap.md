@@ -37,7 +37,7 @@ count, gardens, plants, visits, photographs and reliable labels.
 
 ## Prototype 1: get trustworthy records
 
-The planned ESP32 code will control the two motors and read the encoders and
+The planned Nucleo code will control the two motors and read the encoders and
 sensors. The Radxa ZERO 3W will log UART telemetry to CSV and save timestamped
 C920 photos. This wiring and code are untested. Milestone 0 includes the
 [board checks before wiring](plan.md#milestone-0-checks-before-wiring).

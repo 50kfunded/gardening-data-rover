@@ -27,6 +27,7 @@ class RunFiles:
                       if data_source == "simulation" else
                       "Untested hardware logger. Source selected by the operator; not validated."),
             "telemetry_hz": TELEMETRY_HZ, "command_unit": "rad/s",
+            # Keep the legacy boot-time keys so the schema stays the same.
             "timebase": "esp32_boot_ms", "esp32_first_ms": first_row["t_ms"],
             "first_received_unix_s": now.timestamp(),
             "time_anchor_status": "receive time only; UART latency and clock drift unmeasured",

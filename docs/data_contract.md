@@ -26,15 +26,15 @@ the run's `photos/` directory.
 
 | CSV column | Meaning and unit | Source on the future rover |
 | --- | --- | --- |
-| `t_ms` | Milliseconds since ESP32 boot, unsigned integer | ESP32 monotonic clock |
-| `cmd_left` | Active requested left wheel angular speed, rad/s | Target accepted by the ESP32 |
-| `cmd_right` | Active requested right wheel angular speed, rad/s | Target accepted by the ESP32 |
-| `enc_left` | Cumulative left pulse count since ESP32 boot | Left LM393 interrupt |
-| `enc_right` | Cumulative right pulse count since ESP32 boot | Right LM393 interrupt |
+| `t_ms` | Milliseconds since Nucleo boot, unsigned integer | Nucleo monotonic clock |
+| `cmd_left` | Active requested left wheel angular speed, rad/s | Target accepted by the Nucleo |
+| `cmd_right` | Active requested right wheel angular speed, rad/s | Target accepted by the Nucleo |
+| `enc_left` | Cumulative left pulse count since Nucleo boot | Left LM393 interrupt |
+| `enc_right` | Cumulative right pulse count since Nucleo boot | Right LM393 interrupt |
 | `gyro_z` | Angular velocity about body Z, rad/s | MPU6050, converted to this unit |
 | `accel_x` | Body X accelerometer reading, m/s^2, with gravity included | MPU6050 |
 | `accel_y` | Body Y accelerometer reading, m/s^2, with gravity included | MPU6050 |
-| `soil_raw` | Raw 12-bit ADC count, integer 0..4095 | GPIO39 ADC, explicitly configured to 12 bits |
+| `soil_raw` | Raw 12-bit ADC count, integer 0..4095 | A0 / PA0 ADC, planned to be explicitly configured to 12 bits |
 | `temp_c` | Air temperature in degrees Celsius | BME280 |
 | `humidity_pct` | Relative humidity, 0..100 percent | BME280 |
 
@@ -55,8 +55,8 @@ signed distance from them without explaining a direction assumption.
 
 ## The messages
 
-The proposed ESP32-to-Radxa line includes the active commands so we do not mistake
-the last command sent by the Radxa for one actually accepted by the ESP32:
+The proposed Nucleo-to-Radxa line includes the active commands so we do not mistake
+the last command sent by the Radxa for one actually accepted by the Nucleo:
 
 ```text
 T,t_ms,cmd_left,cmd_right,enc_left,enc_right,gyro_z,accel_x,accel_y,soil_raw,temp_c,humidity_pct
@@ -107,8 +107,8 @@ each byte occupies 10 bit periods including start and stop. The theoretical
 capacity is 115200 / 10 = 11520 bytes/s in each direction. At our maximum
 256-byte line size, 10 telemetry lines/s use at most 2560 bytes/s, leaving
 room in the link. This is a link-budget calculation, not measured performance.
-See [Espressif's UART documentation](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/uart.html)
-and [the ESP32 technical reference manual](https://documentation.espressif.com/esp32_technical_reference_manual_en.pdf).
+See [ST UM2505](https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf)
+for the planned Nucleo serial routes. This calculation does not verify hardware timing.
 
 The hardware `t_ms` is elapsed boot time, not a date. On the Radxa we will
 record a start-time anchor to relate it to UTC photo times and measure the
@@ -116,7 +116,7 @@ alignment error. `date` and `started_unix_s` in this simulation describe when
 the computer generated the files; they are not a hardware clock synchronisation.
 The virtual clock begins at zero; samples are 100, 200, ..., 30000 ms.
 
-A hardware run must not silently continue through an ESP32 reboot, counter
+A hardware run must not silently continue through a Nucleo reboot, counter
 reset or a 32-bit millisecond rollover (about 49.7 days). We will split or
 explicitly handle these events when implementing the live UART logger. S0's
 checker expects an uninterrupted, perfectly spaced simulation only.
@@ -181,3 +181,12 @@ Python's [CSV documentation](https://docs.python.org/3.12/library/csv.html)
 explains the `csv.DictWriter` used here. It handles delimiters and converts
 `None` to an empty cell. Files are opened with `newline=""` to let the CSV
 module manage line endings correctly on Windows.
+
+## Legacy metadata names
+
+The controller change does not change schema version 1, any T/D/STOP line,
+the 11 CSV columns, missing cells or the 256-byte limit. Existing
+`timebase: esp32_boot_ms` and `esp32_t0_ms`, `esp32_first_ms` and
+`esp32_last_ms` names stay for compatibility. They describe controller boot
+time; they are not proof of which board generated a run. All current examples
+remain simulated. Renaming these keys would need a separate schema proposal.

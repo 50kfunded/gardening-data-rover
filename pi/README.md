@@ -47,8 +47,9 @@ python -m pi.send_command --config pi/config.local.json --source hardware STOP
 python -m pi.send_command --config pi/config.local.json --source hardware D 1 1
 ```
 
-Milestone 1 firmware only prints a USB counter and leaves Serial2 idle. These
-logger examples need later telemetry firmware; they cannot receive T lines
+Milestone 1 firmware only prints a counter on the ST-LINK VCP and leaves
+USART1 uninitialised. Later PC tests will use D/STOP and T lines on the VCP;
+the Radxa link will use USART1 D1 / PC4 TX and D0 / PC5 RX. These logger examples need later telemetry firmware; they cannot receive T lines
 from the counter firmware. The counter is never recorded as sensor data.
 
 The logger creates ignored `runs/<run_id>/telemetry.csv`, `meta.json` and an
@@ -86,13 +87,14 @@ Use V4L2 tools to inspect the C920's supported modes and controls, and OpenCV
 or `fswebcam` for capture. The C920 is planned for USB-C 2 through a data
 adapter. There is no dependency on `RPi.GPIO`, `pigpio` or `picamera`.
 
-The ESP32 will keep the real-time motor loop and sensor reads. The Radxa will
+The Nucleo will keep the real-time motor loop and sensor reads. The Radxa will
 send drive commands and save the returned telemetry and photos. Power goes
-to Radxa USB-C 1, with a separate USB lead for the ESP32. No ESP32 power feed
+to Radxa USB-C 1, with a separate Micro-B USB lead for the Nucleo. Check its
+power-source selection on the actual revision before moving any jumper. No Nucleo power feed
 from header pins 2/4 is planned.
 
 See [the planned wiring](../hardware/wiring.md) and
 [milestone 0 checks](../docs/plan.md#milestone-0-checks-before-wiring).
 No real serial connection, camera capture or headless setup has passed a
-hardware test yet. [The Windows adapter notes](../docs/windows_uart.md) are
-planned checks, with the 3.3 V wiring and single-power-source rule.
+hardware test yet. [The Windows virtual COM port notes](../docs/windows_uart.md) are
+planned checks, with the VCP route and single-power-source rule.

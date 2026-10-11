@@ -15,14 +15,16 @@ Real UART operation is untested. Camera code, PID, Kalman filtering and AI are
 not started. No hardware milestone has passed.
 
 The Radxa ZERO 3W has been bought for £44 including shipping. It has not been
-tested, and no rover has been built. The other parts are still planned, apart
-from the already-owned C920. See [the parts list](hardware/parts.md) and
+tested, and no rover has been built. The NUCLEO-G474RE was ordered on
+11 October 2026 from Anglia at a listed £11.98 ex VAT. The VAT-inclusive
+invoice total is unconfirmed; it has not arrived or been tested. The other
+parts are still planned, apart from the already-owned C920. See [the parts list](hardware/parts.md) and
 [logic board plan](docs/logic_board.md).
 
 ## Folder roles
 
 - `shared/data_format.py`: the 11-column schema and line parser.
-- `simulation/`: invented ESP32 lines, file generation and pass/fail checks.
+- `simulation/`: invented controller lines, file generation and pass/fail checks.
 - `analysis/`: reads and summarises the simulated files, with no AI inference.
 - `firmware/`: planned milestone 1 counter and pure protocol functions; hardware untested.
 - `pi/`: serial logger and commands; tested only with simulated input.
@@ -36,13 +38,15 @@ The new `python -m pi.check` needs pyserial. See [software preparation](docs/sof
 for the virtual environment, native GCC and PlatformIO commands. `pi.demo`
 uses loopback and labels its files SIMULATED DATA.
 
-The shared parser and data contract are unchanged. Extra counters, checksums
+The wire protocol and schema are unchanged. Legacy `esp32_*` metadata names
+remain for compatibility and refer to controller boot time, not a board identity.
+Extra counters, checksums
 and boot identification remain [proposals](docs/protocol_proposals.md), not code.
 
 ## Planned architecture
 
-ESP32-WROOM-32 handles motors, encoder interrupts and sensors with a 100 Hz
-control loop. Radxa ZERO 3W is planned for UART logging, drive commands and a USB
+NUCLEO-G474RE is planned to handle motors, encoder interrupts and sensors with
+a 100 Hz control loop. Radxa ZERO 3W is planned for UART logging, drive commands and a USB
 C920 camera. UART is proposed at 115200 baud with text lines. Telemetry begins at
 10 Hz, separately from the control update rate.
 
@@ -53,9 +57,11 @@ See [the contract](docs/data_contract.md) before changing a field or unit.
 
 Motor power is a separate AA pack; the logic/camera power bank shares ground.
 The camera is planned for the Radxa's USB-C 2 through a data-capable adapter.
-The ESP32 is planned on its own USB lead, with no supply from Radxa header
+The Nucleo is planned on its own USB lead, with no supply from Radxa header
 pins 2/4. The [wiring document](hardware/wiring.md) uses UART3-M0 on physical
-pins 3 RX, 5 TX and 6 GND, with crossed TX/RX at 3.3 V. Enable the overlay in
+pins 3 RX, 5 TX and 6 GND, crossed to USART1 D1 / PC4 TX and D0 / PC5 RX
+at 3.3 V. The PC counter uses the separate ST-LINK VCP, LPUART1 PA2/PA3.
+Enable the Radxa overlay in
 `rsetup`; `/dev/ttyS3` is expected but unconfirmed. The wiring is planned and
 untested. Do the [milestone 0 checks](docs/plan.md#milestone-0-checks-before-wiring)
 before connecting the UART.

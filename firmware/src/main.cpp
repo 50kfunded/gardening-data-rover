@@ -3,14 +3,14 @@
 #include <Arduino.h>
 #include "rover_protocol.h"
 
-constexpr int LINK_RX = 16;
-constexpr int LINK_TX = 17;
 uint32_t counter = 0;
 
 void setup() {
-    Serial.begin(115200);  // USB serial monitor on the DevKit.
-    Serial2.begin(115200, SERIAL_8N1, LINK_RX, LINK_TX);
-    // Serial2 is reserved for later. This milestone does not read or write it.
+    // This board's Arduino core maps Serial to LPUART1, PA2 TX / PA3 RX.
+    // The default board routing connects it to the ST-LINK virtual COM port.
+    Serial.begin(115200);
+    // USART1 on D1 PC4 TX / D0 PC5 RX is reserved for the later Radxa link.
+    // Leave it uninitialised here. This milestone only prints the counter.
     Serial.println("PLANNED MILESTONE 1: counter only, no sensor data");
 }
 

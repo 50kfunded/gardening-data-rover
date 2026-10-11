@@ -18,8 +18,8 @@ first two readings at 100 and 200 ms and shared them for review. The metadata
 is marked as simulation and the photos folder is present and empty.
 
 This passes the first software step. The hardware tests still need the parts.
-Counter firmware and serial logging are now prepared, with computer checks
-only. [Software preparation](software_prep.md) gives the instructions. No
+The NUCLEO-G474RE has been ordered, not received or tested. Counter firmware
+and serial logging are now prepared, with computer checks only. [Software preparation](software_prep.md) gives the instructions. No
 hardware milestone has passed; continue through the hardware steps one at a time.
 
 ## The next planning step
@@ -42,7 +42,7 @@ These are planned tests. None have passed yet.
 | Step | What I will build | What counts as a pass |
 | --- | --- | --- |
 | 0 | Set up the Radxa Debian image for ZERO 3W, WiFi, SSH and the UART3-M0 overlay | SSH into the Radxa from the computer and record the checks below before wiring |
-| 1 | Make a small PlatformIO project for the exact ESP32 board | See an increasing counter over USB serial |
+| 1 | Make a small PlatformIO project for NUCLEO-G474RE with Arduino and ST-LINK | See an increasing counter over the ST-LINK virtual COM port at 115200 baud |
 | 2 | Connect the motor driver and test each motor at three PWM levels | Both wheels turn forwards and backwards as commanded; record any direction correction |
 | 3 | Count encoder pulses with interrupts | Several full turns by hand give a consistent count per wheel revolution; record both counts |
 | 4 | Control wheel speed with PID and test straight driving | Drive 2 m on a flat floor within 10 cm of the marked line, three runs in a row; save gains and results |
@@ -60,7 +60,7 @@ separate attended visit, not an automatic capability of Prototype 1.
 
 ## Milestone 0 checks before wiring
 
-**Planned and untested.** Start with the Radxa on its own. Leave the ESP32
+**Planned and untested.** Start with the Radxa on its own. Leave the Nucleo
 UART and motor wiring disconnected. Use the Radxa Debian image for ZERO 3W
 and record its exact version. For first boot, use power on USB-C 1, a monitor
 on micro-HDMI and a keyboard on USB-C 2 through a data adapter.
@@ -75,9 +75,9 @@ keyboard to set up WiFi and SSH, then check booting without them.
 | Read-only check | What I need to record |
 | --- | --- |
 | Serial device and console use | Confirm which device belongs to UART3-M0. `/dev/ttyS3` is expected but unconfirmed. Inspect the boot arguments and serial getty services; the selected port must not be used by a console or getty. Seeing a device file alone does not prove its pin mapping. |
-| Header 5 V | Measure DC voltage at pins 2 and 4 relative to GND pin 6, with no external load connected. Record both values and the supply used. Use the meter's voltage mode, not current mode across the pins. Keep pins 2/4 disconnected from the ESP32; voltage alone does not establish available current or protection. |
+| Header 5 V | Measure DC voltage at pins 2 and 4 relative to GND pin 6, with no external load connected. Record both values and the supply used. Use the meter's voltage mode, not current mode across the pins. Keep pins 2/4 disconnected from the Nucleo; voltage alone does not establish available current or protection. |
 | C920 current | Unplug the keyboard and connect the C920 to USB-C 2 through a data adapter. Use a data-capable inline USB meter to record its current while idle and capturing. Record the meter position and any voltage drops or capture failures. A USB descriptor is not a measured current. |
-| Power bank staying on | Check the intended bank, cables and separate ESP32 USB lead under idle and camera-capture loads. Record the test duration, current, voltage and any power-off or reset. A bench-supply test does not establish that the bank stays on. |
+| Power bank staying on | Check the Nucleo power-source selection against the board revision schematic first. Then test the bank, cables and separate Micro-B lead under idle and camera-capture loads. Record the test duration, current, voltage and any power-off or reset. A bench-supply test does not establish that the bank stays on. |
 | Headless WiFi | After a normal shutdown, boot without the monitor or keyboard and SSH in from the computer over WiFi. Record whether it works and how WiFi was configured. Keep network names and credentials out of Git. |
 
 These are future inspection commands to run **on the Radxa**, not in Windows
@@ -150,3 +150,15 @@ puddles and soil health need their own evidence. S1 remains the current step.
 progression through a small fleet and wider pilot. [The dataset plan](dataset_plan.md)
 records the collection examples and how model improvement will be measured.
 These documents are an overview; the next build step still waits for its pass.
+
+## Later encoder milestone, separate from Prototype 1
+
+**Planned and untested.** First count the LM393 single pulse signals with
+interrupts in milestone 3. Direction comes from the accepted command only as
+an assumption; coasting and reversal can break it. Keep raw counts unsigned.
+
+Later test timer-based pulse counting, then magnetic A/B quadrature encoders
+with a new pin plan. `HardwareTimer` has no encoder mode; that stage needs
+HAL or LL configuration. Pass only when measured turns in both directions
+give the expected signed counts and a repeatable load test loses no counted
+pulses against a known reference. No such test or hardware exists yet.

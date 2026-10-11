@@ -6,7 +6,7 @@ from pathlib import Path
 
 from pi.config import PROJECT_DIR, Settings, open_serial
 from pi.recorder import record_chunks
-from simulation.fake_esp32 import telemetry_lines
+from simulation.fake_controller import telemetry_lines
 
 
 def invented_chunks():
