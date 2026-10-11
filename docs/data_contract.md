@@ -1,4 +1,4 @@
-# The data format, version 1
+# The data format, version 2
 
 This records what each number means, its unit and what to save if a reading
 is missing. **All data currently produced by this project is simulated.**
@@ -14,11 +14,13 @@ New simulated CSV files have this first line, followed by the column header:
 # SIMULATED DATA: invented readings; no hardware or real garden measurements.
 ```
 
-`csv_format_version: 2` records that extra notice line. Schema version 1 still
-describes the same 11 telemetry fields. `analysis/read_run.py` reads the notice
-before parsing the CSV. With pandas later, use `comment="#"`. Old local S0 runs
-use CSV format 1 and are accepted only with their simulation metadata; the
-checker warns that those CSV files are not labelled on their own.
+`csv_format_version: 2` records that extra notice line. Metadata schema version 2
+uses controller names for boot times; the 11 telemetry fields are unchanged.
+`analysis/read_run.py` reads the notice
+before parsing the CSV. With pandas later, use `comment="#"`. CSV format 1 is
+accepted only with current version 2 simulation metadata; the checker warns
+that those CSV files are not labelled on their own. Older local S0 runs with
+metadata version 1 are rejected.
 
 One CSV row is one snapshot. Do not attach a photo or repeat the run's notes
 inside every row. Store the run description once in `meta.json` and photos in
@@ -182,11 +184,16 @@ explains the `csv.DictWriter` used here. It handles delimiters and converts
 `None` to an empty cell. Files are opened with `newline=""` to let the CSV
 module manage line endings correctly on Windows.
 
-## Legacy metadata names
+## Controller time metadata
 
-The controller change does not change schema version 1, any T/D/STOP line,
-the 11 CSV columns, missing cells or the 256-byte limit. Existing
-`timebase: esp32_boot_ms` and `esp32_t0_ms`, `esp32_first_ms` and
-`esp32_last_ms` names stay for compatibility. They describe controller boot
-time; they are not proof of which board generated a run. All current examples
-remain simulated. Renaming these keys would need a separate schema proposal.
+Metadata schema version 2 uses `timebase: controller_boot_ms`.
+The simulation records `controller_t0_ms`, its virtual starting time.
+The serial logger records `controller_first_ms` and `controller_last_ms`,
+the first and last accepted boot-time values in each split run. These are
+milliseconds, not UTC dates or proof of which board produced the readings.
+
+This approved metadata change leaves every T/D/STOP line, the 11 CSV columns,
+missing cells and the 256-byte limit unchanged. CSV format version stays 2.
+The reader rejects metadata schema version 1. Generate a new simulated run
+for these checks; older local recordings are not migrated automatically.
+The committed example remains SIMULATED DATA.

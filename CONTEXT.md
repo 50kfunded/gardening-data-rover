@@ -38,9 +38,9 @@ The new `python -m pi.check` needs pyserial. See [software preparation](docs/sof
 for the virtual environment, native GCC and PlatformIO commands. `pi.demo`
 uses loopback and labels its files SIMULATED DATA.
 
-The wire protocol and schema are unchanged. Legacy `esp32_*` metadata names
-remain for compatibility and refer to controller boot time, not a board identity.
-Extra counters, checksums
+The wire protocol and 11 telemetry columns are unchanged. Metadata schema
+version 2 uses `controller_*` boot-time names. Older metadata version 1 is
+not migrated automatically. Extra counters, checksums
 and boot identification remain [proposals](docs/protocol_proposals.md), not code.
 
 ## Planned architecture

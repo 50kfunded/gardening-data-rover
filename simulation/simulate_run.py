@@ -42,8 +42,8 @@ def write_run(output_root, run_id=None):
         "telemetry_hz": TELEMETRY_HZ,
         "duration_s": DURATION_S,
         "expected_rows": SAMPLE_COUNT,
-        "timebase": "esp32_boot_ms",
-        "esp32_t0_ms": 0,
+        "timebase": "controller_boot_ms",
+        "controller_t0_ms": 0,
         "started_unix_s": started.timestamp(),
         "command_unit": "rad/s",
         "calibration": {

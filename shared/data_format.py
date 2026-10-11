@@ -9,7 +9,7 @@ COLUMNS = (
 )
 INTEGER_FIELDS = {"t_ms", "enc_left", "enc_right", "soil_raw"}
 OPTIONAL_FIELDS = set(COLUMNS[5:])  # Missing sensor readings become empty CSV cells.
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # Run metadata uses controller names; telemetry fields are unchanged.
 TELEMETRY_HZ = 10
 SAMPLE_MS = 1000 // TELEMETRY_HZ
 MAX_LINE_BYTES = 256

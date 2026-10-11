@@ -35,7 +35,7 @@ def verify(run_dir):
                 for path in (run_dir / "photos").iterdir()),
             "simulation photos/ must contain no photos")
 
-    previous_ms = metadata["esp32_t0_ms"]
+    previous_ms = metadata["controller_t0_ms"]
     previous_left = previous_right = 0
     for sample_number, row in enumerate(rows, start=1):
         require(row["t_ms"] - previous_ms == SAMPLE_MS,

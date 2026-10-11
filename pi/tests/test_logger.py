@@ -12,7 +12,7 @@ from unittest.mock import patch
 from pi.config import Settings, open_serial
 from pi.demo import invented_chunks
 from pi.recorder import record_chunks
-from shared.data_format import COLUMNS, SIMULATION_NOTICE
+from shared.data_format import COLUMNS, SCHEMA_VERSION, SIMULATION_NOTICE
 
 
 def fake_line(t_ms=100, left=0, right=0):
@@ -52,6 +52,11 @@ class LoggerTests(unittest.TestCase):
         self.assertEqual("0.0", rows[0]["cmd_left"])
         self.assertEqual(SIMULATION_NOTICE, notice)
         self.assertEqual("simulation", meta["data_source"])
+        self.assertEqual(SCHEMA_VERSION, meta["schema_version"])
+        self.assertEqual(2, meta["schema_version"])
+        self.assertEqual("controller_boot_ms", meta["timebase"])
+        self.assertEqual(100, meta["controller_first_ms"])
+        self.assertEqual(200, meta["controller_last_ms"])
         self.assertTrue(meta["run_id"].endswith("_sim"))
         self.assertIn("SIMULATED DATA", meta["notes"])
         self.assertIsNone(meta["pid_gains"]["left"])
@@ -110,6 +115,10 @@ class LoggerTests(unittest.TestCase):
         after = read_files(result["runs"][1])
         self.assertEqual(1, len(before[2]))
         self.assertEqual(1, len(after[2]))
+        self.assertEqual(1000, before[0]["controller_first_ms"])
+        self.assertEqual(1000, before[0]["controller_last_ms"])
+        self.assertEqual(100, after[0]["controller_first_ms"])
+        self.assertEqual(100, after[0]["controller_last_ms"])
         self.assertIn("time_not_increasing", before[0]["end_reason"])
         self.assertEqual(before[0]["end_reason"], after[0]["start_reason"])
         self.assertEqual(1, len(self.reports))

@@ -103,12 +103,13 @@ The later logger will record a receive-time anchor for each split run. For
 a controller time `t_ms`, a rough UTC estimate is:
 
 ```text
-first_received_unix_s + (t_ms - esp32_first_ms) / 1000
+first_received_unix_s + (t_ms - controller_first_ms) / 1000
 ```
 
 Dividing by 1000 converts milliseconds to seconds. This estimate still includes
 unknown UART delay and clock drift, so it is not a checked timing result.
 
-`esp32_first_ms` is a legacy metadata key kept for schema compatibility. It
-means the first controller boot-time value, including for the planned Nucleo.
-The name does not mean a recording came from that older board.
+`controller_first_ms` is the first accepted controller boot-time value in
+that split run. Metadata schema version 2 uses controller names throughout.
+Older version 1 recordings need a separate migration before the current
+reader can accept them. The telemetry columns and messages are unchanged.

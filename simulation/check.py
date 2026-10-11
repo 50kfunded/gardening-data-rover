@@ -47,6 +47,14 @@ def main():
         meta_path.write_text("[]\n", encoding="utf-8")
         expect_failure(lambda: verify(run_dir), "metadata that is not an object")
         metadata = json.loads(original_meta)
+        if metadata["schema_version"] != 2 or metadata["timebase"] != "controller_boot_ms":
+            raise RuntimeError("FAIL: simulation metadata does not use schema version 2")
+        if metadata["controller_t0_ms"] != 0:
+            raise RuntimeError("FAIL: simulation must start at virtual time zero")
+        metadata["schema_version"] = 1
+        meta_path.write_text(json.dumps(metadata), encoding="utf-8")
+        expect_failure(lambda: verify(run_dir), "metadata from schema version 1")
+        metadata = json.loads(original_meta)
         metadata["data_source"] = "hardware"
         meta_path.write_text(json.dumps(metadata), encoding="utf-8")
         expect_failure(lambda: verify(run_dir), "a run falsely marked as hardware")
@@ -62,6 +70,7 @@ def main():
                        "overwriting an existing folder without photos/")
 
     print("PASS: damaged files and false hardware labels are rejected; missing readings stay missing.")
+    print("PASS: metadata uses schema version 2; older versions are rejected.")
     print("Checking the committed SIMULATED example:")
     verify(PROJECT_DIR / "data" / "sample" / "example_sim")
     print("PASS: computer simulation checks only. No hardware milestone has passed.")

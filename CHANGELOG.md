@@ -1,5 +1,14 @@
 # Changes
 
+## 2026-10-11: Controller metadata and power research
+
+- Renamed boot-time metadata to controller names and bumped metadata schema version to 2.
+- Updated the simulation, serial logger and committed SIMULATED example.
+- Kept the 11 telemetry columns, T/D/STOP messages and CSV format version unchanged.
+- Added checks for the new time fields, split-run anchors and rejection of older metadata.
+- Added a sourced power plan for the Nucleo and Radxa, marked planned and untested.
+- The power research does not change the wiring plan or pass a hardware milestone.
+
 ## 2026-10-11: Nucleo controller plan
 
 - Changed the planned real-time controller to NUCLEO-G474RE; Radxa ZERO 3W stays the logic board.
