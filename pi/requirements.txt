@@ -1,0 +1,2 @@
+# Planned and untested serial link. Camera packages come at their milestone.
+pyserial==3.5

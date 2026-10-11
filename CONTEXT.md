@@ -2,13 +2,17 @@
 
 ## What exists
 
-Only a computer simulation is implemented. It generates 300 invented snapshots
+The original computer simulation generates 300 invented snapshots
 over 30 virtual seconds at 10 Hz, writes CSV and JSON, and verifies them.
 The readings are SIMULATED DATA, not hardware or garden observations.
 
 S0, the software preparation step, passed on 9 October 2026. The reorganised
 check passes too. Board setup (0) and hardware steps 1–8 are all pending.
-Firmware, the logic board logger/camera code, PID, Kalman filtering and AI are not started.
+Milestone 1 USB counter firmware is prepared and builds, but is not uploaded
+or tested on a board. Pure protocol functions pass native computer tests.
+The serial logger and command sender pass simulated loopback/fake-input tests.
+Real UART operation is untested. Camera code, PID, Kalman filtering and AI are
+not started. No hardware milestone has passed.
 
 The Radxa ZERO 3W has been bought for £44 including shipping. It has not been
 tested, and no rover has been built. The other parts are still planned, apart
@@ -20,13 +24,20 @@ from the already-owned C920. See [the parts list](hardware/parts.md) and
 - `shared/data_format.py`: the 11-column schema and line parser.
 - `simulation/`: invented ESP32 lines, file generation and pass/fail checks.
 - `analysis/`: reads and summarises the simulated files, with no AI inference.
-- `firmware/` and `pi/`: clearly marked placeholders.
+- `firmware/`: planned milestone 1 counter and pure protocol functions; hardware untested.
+- `pi/`: serial logger and commands; tested only with simulated input.
 - `hardware/`: proposed parts, wiring and mounting, all untested.
 - `data/sample/`: small labelled simulation; no real private data.
 - `docs/`: planned milestones, data contract, trial method and future ideas.
 
 From the repository root, run `python -m simulation.check`. Python 3.12 was
-used for verification; no third-party Python packages are required.
+used for verification; the original simulation needs no third-party packages.
+The new `python -m pi.check` needs pyserial. See [software preparation](docs/software_prep.md)
+for the virtual environment, native GCC and PlatformIO commands. `pi.demo`
+uses loopback and labels its files SIMULATED DATA.
+
+The shared parser and data contract are unchanged. Extra counters, checksums
+and boot identification remain [proposals](docs/protocol_proposals.md), not code.
 
 ## Planned architecture
 

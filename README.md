@@ -2,8 +2,10 @@ I'm building a small ESP32 and Radxa ZERO 3W rover to test driving, sensor loggi
 
 ## Current status
 
-**Only the computer simulation runs. I've bought the Radxa board, but no rover has been built or hardware tested.**
-The logic board code and ESP32 firmware have not started. None of the hardware milestones
+**Software preparation is tested on the computer only. I've bought the Radxa board, but no rover has been built or hardware tested.**
+Milestone 1 counter firmware builds, and the serial logger and command sender
+have only been tested with SIMULATED input. Hardware operation is planned and
+untested. None of the hardware milestones
 1–8 have passed, and board setup milestone 0 has not passed either. There is no
 working garden rover, camera capture, dashboard, PID controller or AI model yet.
 
@@ -11,7 +13,7 @@ The separate software step, S0, passed on 9 October 2026: Python generated and
 checked 300 invented rows. The reorganised one-command check also passes.
 These results test files and parsing, not motors, sensors, UART or real timing.
 
-**all example readings and the committed sample are SIMULATED DATA.** They
+**All example readings and the committed sample are SIMULATED DATA.** They
 were invented on a computer, not collected from a real garden.
 
 ## The data format
@@ -86,6 +88,28 @@ python -m analysis.inspect_run data/sample/example_sim
 
 Legacy CSV format 1 is supported only when simulation metadata accompanies it.
 The checker warns when the standalone simulation notice is absent.
+
+## Software ready for the parts
+
+[Software preparation](docs/software_prep.md) gives the Windows setup, native
+C++ tests and the pending USB counter test. The serial logger uses the unchanged
+shared parser, preserves missing cells, counts malformed lines and splits on
+visible time or encoder resets. Its port has no default.
+
+After installing `requirements-dev.txt` in a virtual environment:
+
+```powershell
+.\.venv\Scripts\python.exe -m pi.check
+.\.venv\Scripts\python.exe -m pi.demo
+.\.venv\Scripts\python.exe -m platformio run -d firmware -e esp32dev
+```
+
+The demo saves 300 invented rows through `loop://`, clearly labelled simulation.
+It does not send anything to a board. [The firmware notes](firmware/README.md)
+and [logger notes](pi/README.md) explain what is prepared and still untested.
+The firmware only prints a USB counter; Serial2 is idle and no motors are used.
+[Windows UART checks](docs/windows_uart.md) are for later hardware testing.
+[Protocol additions](docs/protocol_proposals.md) are proposals awaiting approval.
 
 ## Planned parts
 
@@ -213,8 +237,8 @@ track the build. [Release notes](docs/releases.md) explain tagging after a pass.
 
 | Folder / file | Purpose now |
 | --- | --- |
-| `firmware/` | ESP32 placeholder; not started |
-| `pi/` | Existing logic board placeholder; not started |
+| `firmware/` | Planned USB counter firmware and computer-tested pure protocol functions |
+| `pi/` | Serial logger and command sender, tested only with simulated input |
 | `shared/` | Telemetry contract for simulation and the future logger |
 | `simulation/` | Fake ESP32, run generator, verifier and one-command check |
 | `analysis/` | Reads and summarises simulated saved files; no AI yet |

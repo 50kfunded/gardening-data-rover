@@ -18,6 +18,9 @@ first two readings at 100 and 200 ms and shared them for review. The metadata
 is marked as simulation and the photos folder is present and empty.
 
 This passes the first software step. The hardware tests still need the parts.
+Counter firmware and serial logging are now prepared, with computer checks
+only. [Software preparation](software_prep.md) gives the instructions. No
+hardware milestone has passed; continue through the hardware steps one at a time.
 
 ## The next planning step
 

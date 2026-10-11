@@ -1,7 +1,8 @@
 # How the prototypes could progress
 
-**Planning only.** Only the computer simulation exists. No hardware milestone
-has passed; the proposed dates and fleet sizes below are not achieved results.
+**Planning only.** The simulation and prepared serial code are tested on the
+computer only. Counter firmware builds but is untested on hardware. No hardware
+milestone has passed; the proposed dates and fleet sizes below are not achieved results.
 
 I want to build one useful rover first, then improve the parts that limit the
 garden trial. Each prototype is a stage of the project. It does not mean I

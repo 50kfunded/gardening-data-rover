@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-11: Software preparation
+
+- Added planned milestone 1 counter firmware and pure protocol helpers with native tests.
+- Added the serial logger, configurable port, reset splitting and D/STOP sender.
+- Tested serial input with simulated loopback and fake chunks, keeping missing cells empty.
+- Added setup and Windows adapter notes, plus protocol proposals awaiting approval.
+- Kept the T line contract unchanged. No hardware milestone has passed.
+
 ## 2026-10-11: Radxa wiring plan
 
 - Updated the planned power and UART connections for Radxa ZERO 3W, including the diagram.
