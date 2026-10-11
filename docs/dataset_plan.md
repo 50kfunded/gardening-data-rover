@@ -176,7 +176,7 @@ evaluation matter. See
 
 ## Where the work happens
 
-The ESP32 handles real-time motion and sensor reads. The Pi collects local
+The ESP32 handles real-time motion and sensor reads. The Radxa collects local
 files and can later upload them over WiFi. Heavier analysis and model training
 happen on the PC or laptop; its available hardware determines what is practical.
 A small deployable model could be considered later after performance tests.

@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-11: Radxa wiring plan
+
+- Updated the planned power and UART connections for Radxa ZERO 3W, including the diagram.
+- Added UART3-M0 and the UART4-M1/UART5-M1 fallbacks, with the serial device still unconfirmed.
+- Added milestone 0 checks before wiring and kept the ESP32 on its own USB lead.
+- Updated the logic board code notes and related docs; the folder still stays `pi/`.
+- The computer simulation check passes. All wiring and hardware work remain planned and untested.
+
 ## 2026-10-10: Radxa parts plan
 
 - Changed the logic board plan to Radxa ZERO 3W and updated the cables and bench items.
@@ -16,12 +24,12 @@
 ## 2026-10-10: Computer simulation snapshot
 
 - Organised the fake ESP32, generator and verifier in `simulation/`.
-- Kept the telemetry contract in `shared/` for simulation and future Pi imports.
+- Kept the telemetry contract in `shared/` for simulation and future logic board imports.
 - Added a file-reading pipeline in `analysis/`.
 - Added a clearly labelled simulated sample and `python -m simulation.check`.
 - Labelled generated CSV files and kept missing readings separate from zero.
 - Refused any existing output folder, including an incomplete run.
-- Added unstarted firmware/Pi folders and proposed hardware notes.
+- Added unstarted firmware and logic board folders and proposed hardware notes.
 - Documented the nine pending milestones, proposed trial method and release tags.
 - Expanded ignores for credentials, photos, datasets and environments.
 - Chose MIT for code and CC BY 4.0 for original docs, plans and the simulated sample.

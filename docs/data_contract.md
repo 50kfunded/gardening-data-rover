@@ -2,11 +2,11 @@
 
 This records what each number means, its unit and what to save if a reading
 is missing. **All data currently produced by this project is simulated.**
-The computer simulation uses the same CSV columns planned for the Pi logger.
+The computer simulation uses the same CSV columns planned for the Radxa logger.
 The real firmware and serial connection will come later.
 
 The contract lives in `shared/data_format.py`, imported by both the simulation
-and the future Pi code. The demo's 30-second length lives in `simulation/settings.py`.
+and the future logic board code. The demo's 30-second length lives in `simulation/settings.py`.
 
 New simulated CSV files have this first line, followed by the column header:
 
@@ -55,8 +55,8 @@ signed distance from them without explaining a direction assumption.
 
 ## The messages
 
-The proposed ESP32-to-Pi line includes the active commands so we do not mistake
-the last command sent by the Pi for one actually accepted by the ESP32:
+The proposed ESP32-to-Radxa line includes the active commands so we do not mistake
+the last command sent by the Radxa for one actually accepted by the ESP32:
 
 ```text
 T,t_ms,cmd_left,cmd_right,enc_left,enc_right,gyro_z,accel_x,accel_y,soil_raw,temp_c,humidity_pct
@@ -79,7 +79,7 @@ STOP
 
 These commands are documentation only in S0. The simulator does not accept
 drive commands. The hardware milestone will implement command limits, STOP
-handling, and a command timeout that stops the motors if the Pi goes silent.
+handling, and a command timeout that stops the motors if the Radxa goes silent.
 
 An unavailable sensor reading is an empty field, which becomes an empty CSV
 cell. A real zero stays `0`. Do not replace missing readings with zero. For
@@ -110,7 +110,7 @@ room in the link. This is a link-budget calculation, not measured performance.
 See [Espressif's UART documentation](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/uart.html)
 and [the ESP32 technical reference manual](https://documentation.espressif.com/esp32_technical_reference_manual_en.pdf).
 
-The hardware `t_ms` is elapsed boot time, not a date. On a real Pi we will
+The hardware `t_ms` is elapsed boot time, not a date. On the Radxa we will
 record a start-time anchor to relate it to UTC photo times and measure the
 alignment error. `date` and `started_unix_s` in this simulation describe when
 the computer generated the files; they are not a hardware clock synchronisation.

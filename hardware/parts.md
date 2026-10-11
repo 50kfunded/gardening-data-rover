@@ -74,5 +74,6 @@ and heatsink fit still need checking; see the [logic board plan](../docs/logic_b
 
 The power bank feeds the Radxa through USB-C 1, with a separate USB lead for the
 ESP32 at first. The AA pack powers only the motors through the driver, with a
-shared ground. The [existing wiring document](wiring.md) still describes the
-earlier Pi plan and needs a Radxa update before use.
+shared ground. The [planned wiring](wiring.md) now records the Radxa power
+and UART connections. It is untested; do the milestone 0 board checks before
+connecting the UART.

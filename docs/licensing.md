@@ -10,7 +10,7 @@ with attribution and changes stated. Both permit commercial reuse.
 
 | Material | Licence |
 | --- | --- |
-| Python source, package files and future original firmware/Pi source | [MIT](../LICENSE) |
+| Python source, package files and future original firmware/logic board source | [MIT](../LICENSE) |
 | Original Markdown docs, root README, context and changelog | [CC BY 4.0](../LICENSE-DOCS) |
 | Original hardware plans and diagrams | [CC BY 4.0](../LICENSE-DOCS) |
 | Wholly simulated example files in `data/sample/` | [CC BY 4.0](../LICENSE-DOCS) |

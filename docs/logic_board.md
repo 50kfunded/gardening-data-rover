@@ -15,4 +15,11 @@ unconfirmed. The £44 paid cost replaces that estimate. The other prices in the
   match a Pi Zero. Check the actual board, heatsink clearance and mounting parts
   before choosing a bracket or top plate.
 
-The full wiring plan still needs a Radxa update before I use it to connect anything.
+- UART3-M0's device name is expected to be `/dev/ttyS3`, but is unconfirmed.
+  Check the selected overlay and that no console or getty uses the port.
+- Header 5 V, C920 current, power bank behaviour and headless WiFi still need
+  the [milestone 0 checks](plan.md#milestone-0-checks-before-wiring).
+
+The [wiring plan](../hardware/wiring.md) now uses Radxa USB power and UART3-M0.
+It is planned and untested. Keep the ESP32 on its own USB lead and do not use
+header pins 2/4 as its power supply before measurement and supply-path checks.

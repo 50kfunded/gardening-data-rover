@@ -15,7 +15,7 @@ second, and 720p at 30 frames per second, with autofocus. See
 [the C920 specifications](https://www.logitech.com/en-gb/shop/p/c920-pro-hd-webcam).
 
 The first camera milestone will save JPEG photos at 1280 x 720. I will also
-compare 1920 x 1080 stills once capture and logging work on the Pi. 1080p has
+compare 1920 x 1080 stills once capture and logging work on the Radxa. 1080p has
 2.25 times as many pixels as 720p; that alone does not establish sharpness.
 The choice needs real photos and a check that the logger keeps working.
 
@@ -39,7 +39,7 @@ The C920 can supply video as well as still images. Prototype 1's capture
 milestone is for photos. A later optional step could save short video clips
 to show movement, inspect the rover's behaviour or record a visible event.
 
-The camera's advertised frame rate is not a benchmark of this Pi while it
+The camera's advertised frame rate is not a benchmark of this Radxa while it
 also logs telemetry. Before choosing a recording mode, I will check the
 formats the actual camera exposes, capture a short clip, measure any frame
 loss and check that the sensor log is complete. Resolution, frame rate and

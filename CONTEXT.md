@@ -4,7 +4,7 @@
 
 Only a computer simulation is implemented. It generates 300 invented snapshots
 over 30 virtual seconds at 10 Hz, writes CSV and JSON, and verifies them.
-the readings are SIMULATED DATA, not hardware or garden observations.
+The readings are SIMULATED DATA, not hardware or garden observations.
 
 S0, the software preparation step, passed on 9 October 2026. The reorganised
 check passes too. Board setup (0) and hardware steps 1–8 are all pending.
@@ -42,8 +42,12 @@ See [the contract](docs/data_contract.md) before changing a field or unit.
 
 Motor power is a separate AA pack; the logic/camera power bank shares ground.
 The camera is planned for the Radxa's USB-C 2 through a data-capable adapter.
-The existing [wiring document](hardware/wiring.md) still has the earlier Pi
-connections and needs a Radxa update before use.
+The ESP32 is planned on its own USB lead, with no supply from Radxa header
+pins 2/4. The [wiring document](hardware/wiring.md) uses UART3-M0 on physical
+pins 3 RX, 5 TX and 6 GND, with crossed TX/RX at 3.3 V. Enable the overlay in
+`rsetup`; `/dev/ttyS3` is expected but unconfirmed. The wiring is planned and
+untested. Do the [milestone 0 checks](docs/plan.md#milestone-0-checks-before-wiring)
+before connecting the UART.
 
 ## Boundaries for the first build
 

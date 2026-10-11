@@ -16,14 +16,14 @@ Use these names:
 | `p1-m0` through `p1-m8` | The matching actual setup/build milestone has passed |
 | `v1.0.0` | Only after the complete Prototype 1 definition of done is met |
 
-For example, **after Pi setup milestone 0 passes**, from a clean current main:
+For example, **after Radxa setup milestone 0 passes**, from a clean current main:
 
 ```powershell
 git switch main
 git pull --ff-only
 git status --short
 git config --get user.email
-git tag -a p1-m0 -m 'prototype 1 milestone 0: Pi SSH setup passed'
+git tag -a p1-m0 -m 'prototype 1 milestone 0: Radxa setup checks passed'
 git push origin p1-m0
 ```
 

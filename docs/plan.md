@@ -38,14 +38,14 @@ These are planned tests. None have passed yet.
 
 | Step | What I will build | What counts as a pass |
 | --- | --- | --- |
-| 0 | Set up Raspberry Pi OS Lite, WiFi, SSH and UART with the serial console disabled | SSH into the Pi from the computer |
+| 0 | Set up the Radxa Debian image for ZERO 3W, WiFi, SSH and the UART3-M0 overlay | SSH into the Radxa from the computer and record the checks below before wiring |
 | 1 | Make a small PlatformIO project for the exact ESP32 board | See an increasing counter over USB serial |
 | 2 | Connect the motor driver and test each motor at three PWM levels | Both wheels turn forwards and backwards as commanded; record any direction correction |
 | 3 | Count encoder pulses with interrupts | Several full turns by hand give a consistent count per wheel revolution; record both counts |
 | 4 | Control wheel speed with PID and test straight driving | Drive 2 m on a flat floor within 10 cm of the marked line, three runs in a row; save gains and results |
 | 5 | Read the IMU, temperature, humidity and raw soil value | Motion readings respond to tilting/turning; humidity responds to a breath; soil readings differ sensibly between dry and wet references |
-| 6 | Send telemetry and commands over UART; save it on the Pi | One 30 s run makes a clean CSV with no malformed rows; drive commands and STOP work |
-| 7 | Take timestamped C920 photos on the Pi | 20 consecutive photos at the chosen resolution, with correct filenames and no motion blur; stop and settle before every shot |
+| 6 | Send telemetry and commands over UART; save it on the Radxa | One 30 s run makes a clean CSV with no malformed rows; drive commands and STOP work |
+| 7 | Take timestamped C920 photos on the Radxa | 20 consecutive photos at the chosen resolution, with correct filenames and no motion blur; stop and settle before every shot |
 | 8 | Combine driving, logging and photos in one script | Five drive-2-m, stop, photo and logging cycles run unattended on the flat test surface; one folder contains all CSV, metadata and photos |
 
 The sensor test will keep the soil probe's electronics and connector dry.
@@ -54,6 +54,51 @@ combined driving test will not include automatic soil insertion.
 Soil readings without valid soil contact must stay missing; the unattended
 floor test logs motion and air conditions. Manual garden sampling is a
 separate attended visit, not an automatic capability of Prototype 1.
+
+## Milestone 0 checks before wiring
+
+**Planned and untested.** Start with the Radxa on its own. Leave the ESP32
+UART and motor wiring disconnected. Use the Radxa Debian image for ZERO 3W
+and record its exact version. For first boot, use power on USB-C 1, a monitor
+on micro-HDMI and a keyboard on USB-C 2 through a data adapter.
+
+WiFi, SSH and the UART overlay need setting up first. Enable UART3-M0 through
+the `rsetup` overlays, then reboot. These setup actions change configuration;
+the checks below only inspect the result. Menu options and headless WiFi
+preconfiguration still need checking on the installed image. Do not assume
+`before.txt` works. If preconfiguration does not work, use the monitor and
+keyboard to set up WiFi and SSH, then check booting without them.
+
+| Read-only check | What I need to record |
+| --- | --- |
+| Serial device and console use | Confirm which device belongs to UART3-M0. `/dev/ttyS3` is expected but unconfirmed. Inspect the boot arguments and serial getty services; the selected port must not be used by a console or getty. Seeing a device file alone does not prove its pin mapping. |
+| Header 5 V | Measure DC voltage at pins 2 and 4 relative to GND pin 6, with no external load connected. Record both values and the supply used. Use the meter's voltage mode, not current mode across the pins. Keep pins 2/4 disconnected from the ESP32; voltage alone does not establish available current or protection. |
+| C920 current | Unplug the keyboard and connect the C920 to USB-C 2 through a data adapter. Use a data-capable inline USB meter to record its current while idle and capturing. Record the meter position and any voltage drops or capture failures. A USB descriptor is not a measured current. |
+| Power bank staying on | Check the intended bank, cables and separate ESP32 USB lead under idle and camera-capture loads. Record the test duration, current, voltage and any power-off or reset. A bench-supply test does not establish that the bank stays on. |
+| Headless WiFi | After a normal shutdown, boot without the monitor or keyboard and SSH in from the computer over WiFi. Record whether it works and how WiFi was configured. Keep network names and credentials out of Git. |
+
+These are future inspection commands to run **on the Radxa**, not in Windows
+PowerShell. The serial commands help identify the port and console use:
+
+```sh
+ls -l /dev/ttyS*
+cat /proc/cmdline
+systemctl list-units --all 'serial-getty@*'
+```
+
+Once the camera tools are installed, inspect the USB/video devices and network
+state without changing settings:
+
+```sh
+lsusb
+v4l2-ctl --list-devices
+nmcli -t -f DEVICE,TYPE,STATE device status
+```
+
+Review command output before sharing it. Keep the selected serial port as a
+configuration setting in the future logger. Avoid Radxa pins 8/10, the UART2
+debug console, and pins 27/28. The main UART3-M0 and fallback wiring is in
+[the planned wiring](../hardware/wiring.md). No checks above have passed yet.
 
 ## Measurements to keep
 

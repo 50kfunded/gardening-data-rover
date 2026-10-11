@@ -7,4 +7,4 @@ prototype from the brief; they are not an as-built wiring record.
 - [Pin-by-pin wiring and planned mounting](wiring.md)
 
 We will check the actual modules before wiring, then record changes and test
-results one milestone at a time. Firmware and Pi scripts are not started.
+results one milestone at a time. Firmware and logic board scripts are not started.

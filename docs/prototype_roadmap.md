@@ -36,10 +36,13 @@ count, gardens, plants, visits, photographs and reliable labels.
 
 ## Prototype 1: get trustworthy records
 
-The Pi Zero 2 W and ESP32 control the two motors, read the encoders and
-sensors, and save timestamped CSV and C920 photos. The camera milestone starts
-with still photos. The soil probe is placed by hand. The first driving tests
-are on a flat floor, followed by a separate loaded test on the short grass.
+The planned ESP32 code will control the two motors and read the encoders and
+sensors. The Radxa ZERO 3W will log UART telemetry to CSV and save timestamped
+C920 photos. This wiring and code are untested. Milestone 0 includes the
+[board checks before wiring](plan.md#milestone-0-checks-before-wiring).
+The camera milestone starts with still photos. The soil probe is placed by
+hand. The first driving tests are on a flat floor, followed by a separate
+loaded test on the short grass.
 
 The maths here is wheel motion, encoder sampling and PID. The aim is to hold
 a requested wheel speed and understand the measurements used to do it.
@@ -59,11 +62,11 @@ the definition of done. Use the actual plants present at the time.
 
 The main change is repeatability and context. Secure the camera and boards,
 check that the chassis works on the chosen route, mark camera positions,
-check the Pi clock, and use a consistent probe depth. Calibrate the actual
+check the Radxa clock, and use a consistent probe depth. Calibrate the actual
 probe in the actual soil. Retain raw readings and record which measurements
 were valid. Housing and power changes depend on the first build's results.
 
-The Pi will show a photo timeline, calibrated moisture trends and weekly
+The Radxa will show a photo timeline, calibrated moisture trends and weekly
 summaries with missing visits visible. Watering, rain, compost, plant identity
 and visible symptoms are recorded. One or more fixed probes could be added
 as references for what happens between rover visits; that is optional extra
@@ -72,7 +75,7 @@ hardware with its own calibration.
 Ordinary Python rules and graphs come first. A first AI experiment can begin
 on the PC once useful labels exist: for example, visible wilting in tomato
 photos. This remains a learning experiment if it has only seen this garden.
-"No visible wilting" does not mean "confirmed healthy". The Pi keeps capturing
+"No visible wilting" does not mean "confirmed healthy". The Radxa keeps capturing
 and logging; training and heavier analysis happen on the PC or laptop.
 
 **Proposed pass:** over 14 scheduled days, at least 90% of planned visits have

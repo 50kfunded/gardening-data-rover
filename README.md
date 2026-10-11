@@ -137,11 +137,10 @@ No seller stock or delivery price is confirmed here.
 
 ## Proposed wiring
 
-**Untested: check the actual module labels before connecting power.**
+**Planned and untested: check the actual module labels before connecting power.**
 
-This section and the linked wiring document still describe the earlier Raspberry
-Pi plan. They need a Radxa update before I use them to connect anything. The Pi
-power and UART connections below do not apply to the Radxa.
+The logic board is Radxa ZERO 3W. Its numbers below are physical header pins;
+the ESP32 numbers are GPIO numbers. TX crosses to the other board's RX.
 
 | Connection | Planned pins |
 | --- | --- |
@@ -150,15 +149,26 @@ power and UART connections below do not apply to the Radxa.
 | Encoders | Left DO to GPIO34, right DO to GPIO35; VCC 3V3 |
 | Shared I2C | SDA GPIO21, SCL GPIO22; MPU6050 and BME280 at 3V3 |
 | Soil sensor | AO GPIO39, VCC 3V3 |
-| UART | ESP32 TX GPIO17 → Pi RX GPIO15, physical pin 10 |
-| UART | ESP32 RX GPIO16 ← Pi TX GPIO14, physical pin 8 |
-| Logic power | Power bank → Pi PWR IN; Pi 5 V pin 2 → verified ESP32 5 V/VIN input |
-| Camera | C920 → Pi USB data port through OTG |
+| UART3-M0 | ESP32 TX2 GPIO17 → Radxa pin 3, UART3_RX_M0 |
+| UART3-M0 | ESP32 RX2 GPIO16 ← Radxa pin 5, UART3_TX_M0 |
+| UART ground | ESP32 GND ↔ Radxa pin 6 |
+| Logic power | Power bank output, at least 5 V / 2 A, → Radxa USB-C 1; ESP32 on its own USB lead |
+| Camera | C920 → Radxa USB-C 2 through a data-capable USB-C to USB-A adapter |
+| First boot only | Micro-HDMI to a monitor; keyboard on USB-C 2 through an adapter, unplugged before connecting the C920 |
 
 All grounds join together, including AA negative. The AA pack supplies the
 motors through the driver. GPIO34/35 have no internal pull-ups; check the
-encoder modules' outputs. Disconnect the Pi 5 V feed when USB-programming the
-ESP32 unless its documented power circuit allows both supplies.
+encoder modules' outputs. Keep Radxa header pins 2/4 disconnected from the
+ESP32 until measured and the supply path is checked. Voltage alone does not
+establish available current or protection; the planned ESP32 supply is USB.
+
+Use 3.3 V UART logic at 115200 baud, 8 data bits, no parity and one stop bit.
+Enable UART3-M0 through the `rsetup` overlays and reboot. `/dev/ttyS3` is expected
+but unconfirmed until checked on the board. Avoid Radxa pins 8/10, the UART2
+debug console, and pins 27/28. UART4-M1 and UART5-M1 fallbacks are listed in
+[the planned wiring](hardware/wiring.md). Do the
+[milestone 0 board checks](docs/plan.md#milestone-0-checks-before-wiring) before
+connecting the UART wires. Nothing in this wiring has passed a hardware test.
 
 [The full wiring plan](hardware/wiring.md) has motor outputs, capacitor polarity,
 ground pins, a diagram and the planned standoffs, straps and camera bracket.
