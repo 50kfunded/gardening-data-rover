@@ -145,11 +145,15 @@ A Radxa reboot doesn't guarantee BB48 loses power or receives STOP. TB6612
 has internal 200 kΩ pull-downs; STBY low disables outputs in standby, not
 active braking. Its valid logic-supply limits still apply. [Toshiba][tb6612]
 
-Plan seven external 10 kΩ driver pull-downs, but measure them at boot/reset
-with VM disconnected. A2 E9 needs special review: 10 kΩ isn't the published
-affected-input workaround of 8.2 kΩ or less. A4 fixes E9; reset checks remain.
-Revise the circuit before VM if low isn't assured. Current counter firmware
-has no motor control, timeout or rearm. Later code and a separate physical
+Plan seven external 4.7 kΩ driver pull-downs, ±5% or better. At +5%, the
+highest resistance is 4.935 kΩ, about 40% below E9's 8.2 kΩ limit. The value
+is a proposal until measured; all wiring remains planned and untested.
+Confirm A2/A4 silicon and measure every driver input at power-up, reset,
+BOOT and USB disconnect with VM disconnected. E9 doesn't affect pull-downs
+immediately after power-on or RUN reset while input-enable is clear; later
+pin configuration still needs checking. A4 is unaffected by E9, but reset
+checks remain. Revise the circuit before VM if low isn't assured. Current
+counter firmware has no motor control, timeout or rearm. Later code and a separate physical
 motor-power e-stop need their own tests. [RP2350 errata][rp2350],
 [A4 announcement][a4], [pin plan](../hardware/wiring.md)
 
@@ -323,7 +327,7 @@ and transient capture ability have not been selected.
 - Delivered base BB48, headers, PCB revision and A2/A4 silicon. Board revision is not chip stepping.
 - BB48 current, USB/bank startup and the one-source USB/VSYS rule.
 - ADC reference/output limits and repeatability with motors off/on.
-- STBY/PWM/direction logic low at boot/reset with VM disconnected; 10 kΩ is not a guaranteed A2 E9 workaround.
+- STBY/PWM/direction logic low at power-up/reset/BOOT/disconnect with VM disconnected; seven proposed 4.7 kΩ pull-downs, ±5% or better, untested until measured. Keep the A2/A4 check and confirm resistor tolerance against the E9 limit.
 - Crossed UART0 to Radxa UART3-M0 and reset/disconnect run handling.
 - Radxa boot/peak current, USB-C source compatibility, cable voltage drop and C920 behaviour.
 - Bank low-load shutoff, mode timeout and interaction between outputs.

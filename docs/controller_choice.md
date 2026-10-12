@@ -36,10 +36,11 @@ doesn't prove encoder accuracy, soil accuracy or a better camera stream.
 - Confirm base BB48, fitted headers, board revision and **A2 versus A4** silicon.
 - A2 has E9 GPIO input leakage; A4 fixes it. Check ADC pad configuration and
   readings with motors off/on. Don't promise a noise-free ADC.
-- Test seven planned 10 kΩ driver pull-downs at boot/reset/USB disconnect
-  with VM disconnected. They aren't the data sheet's guaranteed A2 workaround,
-  which specifies 8.2 kΩ or less for affected inputs. Revise the circuit before
-  motor power if low isn't guaranteed. [Errata][rp2350], [A4 announcement][a4]
+- Test seven proposed 4.7 kΩ driver pull-downs (±5% or better) at
+  boot/reset/BOOT/USB disconnect with VM disconnected. At +5%, 4.935 kΩ is
+  about 40% below E9's 8.2 kΩ limit. The value remains planned and untested
+  until measured; revise the circuit before motor power if low isn't assured.
+  [Errata][rp2350], [A4 announcement][a4]
 - Check USB upload/counter, whole-board current and bank stay-on.
 - Test UART0 GPIO0/1 to Radxa UART3-M0, including resets and disconnects.
 - Review PWM/I2C connector sharing and every later actuator circuit.

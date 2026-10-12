@@ -112,7 +112,8 @@ Base Olimex RP2350-PICO2-BB48 is the controller choice at £14.50, **not yet
 bought**. The C920 is already owned. No working-rover total is confirmed.
 
 The [parts list](hardware/parts.md) includes a BB48 USB-C data lead, seven
-10 kΩ driver pull-downs, a 100 nF soil-input capacitor and an inline USB
+proposed 4.7 kΩ driver pull-downs (±5% or better, untested until measured),
+a 100 nF soil-input capacitor and an inline USB
 power meter. Use checked spare chargers/adapters where possible. A hub is
 optional after measurements, not required to power BB48. The Nucleo and
 ESP32 order ideas are dropped.

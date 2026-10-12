@@ -70,10 +70,11 @@ and measure any optional hub arrangement. There is no host-handshake power
 fix required for BB48's documented path, but actual startup/stay-on are untested.
 
 Record A2/A4 silicon and ADC repeatability with motors off/on. Seven planned
-10 kΩ pull-downs at TB6612 STBY/PWM/direction inputs need a boot/reset/BOOT
-test with VM disconnected. 10 kΩ isn't the guaranteed A2 E9 workaround;
-revise the circuit before motor power if logic low isn't assured. Add a
-planned 100 nF soil-input capacitor and an inline USB meter to the parts plan.
+4.7 kΩ pull-downs (±5% or better) at TB6612 STBY/PWM/direction inputs need a
+boot/reset/BOOT test with VM disconnected. At +5%, 4.935 kΩ is about 40%
+below E9's 8.2 kΩ limit, but the value is a proposal until measured. Revise
+the circuit before motor power if logic low isn't assured. Add a planned
+100 nF soil-input capacitor and an inline USB meter to the parts plan.
 Later firmware needs local timeout/rearm and a separate physical motor e-stop.
 
 [Wiring](hardware/wiring.md), [bring-up](docs/plan.md), [power](docs/power_plan.md)

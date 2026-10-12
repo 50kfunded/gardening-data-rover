@@ -108,7 +108,7 @@ See [the power plan](power_plan.md#my-proposed-usb-host-fix).
 | Optional host/hub | Only after separate currents are known. BB48 alone on USB-C 2 first, then hub+C920+BB48; record enumeration, sustained capture, current/voltage and errors. Published 500 mA is the limit to plan against, not the 1.45 A protection calculation. |
 | Powered hub | Check its supply and upstream back-feed before connecting boards. It can keep BB48 powered when Radxa is off; no automatic motor safety follows. |
 | Whole-bank output | Include all downstream loads once; separate BB48 bank output needs its own measurement. Record per-output limits, drop, startup and lowest-load stay-on. |
-| Motor-off defaults before VM | Seven 10 kΩ pull-downs at STBY/PWM/direction inputs. Measure logic low during power-up, reset, BOOT and disconnect, with VM disconnected. Check A2 E9 caveat; revise the circuit if needed before motor power. |
+| Motor-off defaults before VM | Seven proposed 4.7 kΩ pull-downs, ±5% or better, at STBY/PWM/direction inputs. Maximum at +5% is 4.935 kΩ, about 40% below E9's 8.2 kΩ limit. Value is untested until measured: confirm A2/A4 silicon and logic low during power-up, reset, BOOT and disconnect, with VM disconnected. Revise the circuit if needed before motor power. |
 
 The first measurements don't need a hub. No hub is bought or required for
 BB48 power. If shared USB current/declarations don't fit, retain separate

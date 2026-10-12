@@ -27,8 +27,10 @@ for a simulation result.
 The [later BB48 bench checks](plan.md#later-bench-check-bb48-usb-and-radxa-uart)
 cover USB serial/reset paths, separate-source bank operation and the future
 crossed UART0 link to Radxa. Record A2/A4 silicon and 12-bit ADC behaviour with
-motors off/on. Test the seven driver pull-downs with VM disconnected before
-motor power; 10 kΩ is not a guaranteed A2 E9 workaround.
+motors off/on. Test the seven proposed 4.7 kΩ driver pull-downs (±5% or
+better) at boot/reset/BOOT/disconnect with VM disconnected before motor
+power. At +5%, 4.935 kΩ is about 40% below E9's 8.2 kΩ limit; the value
+remains planned and untested until measured. [Reset checks](../hardware/wiring.md#motor-driver-and-reset-defaults)
 
 If a hub is considered, measure USB-C 2 with C920 and BB48 together, USB
 declarations, back-feed, sustained behaviour and bank stay-on. The hub is not

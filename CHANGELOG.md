@@ -1,11 +1,19 @@
 # Changes
 
+## 2026-10-13: Pull-down proposal and cancelled order note
+
+- Changed the seven proposed TB6612 input pull-downs to 4.7 kΩ, ±5% or better, across the parts, wiring and related docs.
+- Re-read RP2350 E9: 4.935 kΩ at +5% is about 40% below its 8.2 kΩ external pull-down limit. The value stays planned and untested until measured; kept A2/A4 and boot/reset checks with VM disconnected.
+- Corrected the Anglia entry to say the Nucleo order was cancelled and the planned controller changed to the base BB48, not yet bought.
+- Logger checks (18 tests), simulation checks (300 invented rows) and native protocol tests (8 tests) passed on the computer only, with no hardware connected.
+- Kept the data contract and T/D/STOP unchanged. No hardware milestone has passed.
+
 ## 2026-10-13: BB48 controller preparation
 
-- Selected base Olimex RP2350-PICO2-BB48 at £14.50, not yet bought. Nucleo and ESP32 order ideas are dropped; Radxa stays the computer.
+- Selected base Olimex RP2350-PICO2-BB48 at £14.50, not yet bought. The Anglia Nucleo order was cancelled and the ESP32 idea dropped; Radxa stays the computer.
 - Switched PlatformIO/Arduino-Pico and built the USB-only, once-a-second counter for `olimex_pico2bb48`.
 - Kept the native environment and pure protocol library unchanged. Updated USB/UART instructions and the sourced GPIO/diagram plan, including later reservations.
-- Planned seven 10 kΩ driver pull-downs, a 100 nF soil-input capacitor and an inline USB power meter. Added A2/A4, ADC motors-off/on, STBY reset and Radxa UART checks.
+- Planned seven driver pull-downs (now revised to 4.7 kΩ, ±5% or better, untested until measured), a 100 nF soil-input capacitor and an inline USB power meter. Added A2/A4, ADC motors-off/on, STBY reset and Radxa UART checks.
 - Replaced the old controller power procedure with BB48 USB/VSYS checks; kept Radxa's 500 mA host budget and optional hub measurements.
 - Updated related docs and recorded the choice/alternatives. Contract board wording changed only; columns, T/D/STOP, empty readings, 256-byte limit and metadata schema did not change.
 - Native, logger and simulation checks passed on the computer with simulated inputs. Hardware steps 0–8 remain pending; no upload or real measurement was made.
@@ -41,7 +49,7 @@ Older entries below describe earlier plans/results, not the currently selected c
 ## 2026-10-11: Nucleo controller plan
 
 - Changed the planned real-time controller to NUCLEO-G474RE; Radxa ZERO 3W stays the logic board.
-- Recorded the Anglia order at £11.98 ex VAT, with the invoice total unconfirmed and hardware untested.
+- The Anglia NUCLEO-G474RE order was later cancelled; the planned controller changed to the base Olimex RP2350-PICO2-BB48, not yet bought and untested.
 - Built the counter for Arduino and ST-LINK, checking the core's virtual COM port mapping.
 - Added a proposed pin plan, separate USB power checks and mixed jumper types.
 - Kept single-pulse encoder interrupts first; timer counting and magnetic quadrature are a later milestone.

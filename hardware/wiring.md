@@ -80,17 +80,27 @@ positive. Left motor uses AO1/AO2; right uses BO1/BO2. Put a correctly rated
 100 µF capacitor across VM/GND near the driver, with correct polarity.
 Measure motor start/stall requirements against the actual driver's limits.
 
-Plan one **10 kΩ pull-down to GND at STBY, PWMA, PWMB, AIN1, AIN2, BIN1 and
-BIN2**: seven resistors, at driver inputs. Check module pull-ups. The chip has
-weaker internal pull-downs; STBY low gives standby, not active braking.
+Plan one **4.7 kΩ pull-down, ±5% or better, to GND at STBY, PWMA, PWMB,
+AIN1, AIN2, BIN1 and BIN2**: seven resistors, at driver inputs. The value is
+a proposal until measured; all wiring is planned and untested. Check module
+pull-ups. The chip has weaker internal pull-downs; STBY low gives standby,
+not active braking.
 [Toshiba TB6612 data sheet][tb6612]
 
 **Check A2 versus A4 silicon before relying on those resistors.** A2 has E9
-input leakage; 10 kΩ is not a guaranteed workaround. The data sheet specifies
-8.2 kΩ or less for its affected-input pull-down workaround. Measure STBY and
-other inputs at power-up, RESET, BOOT and USB disconnect with VM disconnected.
-Revise the circuit before motor power if low is not guaranteed. A4 fixes E9,
-but reset checks still apply. [RP2350 errata][rp2350], [A4 announcement][a4]
+input leakage when the input buffer is enabled, the output buffer is disabled
+and the pad voltage is in the undefined logic region. The data sheet allows
+an external pull-down of **8.2 kΩ or less**. At +5% tolerance, 4.7 kΩ becomes
+**4.935 kΩ**, leaving 3.265 kΩ (about 40%) below that limit. Confirm the
+resistor tolerance and measure the actual circuit; the calculation doesn't
+prove motor-off behaviour. [RP2350 errata, E9][rp2350]
+
+E9 doesn't affect pull-downs immediately after power-on or RUN reset while
+input-enable is clear. Later pin configuration still needs checking. Measure
+STBY and other inputs at power-up, RESET, BOOT and USB disconnect with VM
+disconnected. Revise the circuit before motor power if low isn't assured.
+A4 is unaffected by E9, but the same reset checks still apply.
+[RP2350 errata, E9][rp2350], [A4 announcement][a4]
 
 The present counter implements no motor commands or timeout. Later firmware
 needs STBY low at startup, a local command timeout and deliberate rearm.
@@ -166,7 +176,7 @@ flowchart LR
     bb48 -->|GPIO0 TX to pin 3 RX| radxa
     radxa -->|pin 5 TX to GPIO1 RX| bb48
     bb48 -->|GPIO6 to 12: PWM, direction, STBY| driver[TB6612FNG]
-    pulls[Seven 10k pull-downs: check at reset] --- driver
+    pulls[Seven proposed 4.7k pull-downs: check at reset] --- driver
     cells[4 AA NiMH cells] -->|VM| driver
     driver --> motors[Two geared motors]
     encoders[LM393 outputs] -->|GPIO14 and 15| bb48

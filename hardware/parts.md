@@ -21,7 +21,7 @@ not current delivered quotes, and unknown costs stay unpriced.
 | 2WD chassis, two 1:48 motors, wheels, caster, encoder discs and 4xAA holder | £10–20 estimate | Disc fit, motor ratings, stall current and traction unverified |
 | Two LM393 slotted encoder modules, if absent from kit | £2–4 estimate | 3.3 V output/pull-ups; one pulse signal per wheel |
 | TB6612FNG driver | £3–5 estimate | Exact module, pull-ups and motor-current limits |
-| Seven 10 kΩ pull-down resistors | Not priced; not bought | One each for STBY, PWMA/PWMB and four direction inputs; reset-low check required, especially on A2 |
+| Seven 4.7 kΩ pull-down resistors, ±5% or better | Not priced; not bought | Proposed and untested; one each for STBY, PWMA/PWMB and four direction inputs; reset-low check required, especially on A2 |
 | 100 nF ceramic capacitor for soil ADC | Not priced; not bought | GPIO40 to GND near ADC pin; settling/loading still untested |
 | MPU6050 | £2–4 estimate | I2C1 at 3.3 V |
 | BME280 | £3–6 estimate | Humidity-capable BME280, not BMP280; 3.3 V I2C |
@@ -55,10 +55,13 @@ The BB48 base has no PSRAM or microSD socket, so GPIO8/9/10/11 are available
 for the proposed motor plan. That is not true of BB48R. Check the delivered
 labels and headers against [Olimex's schematic][schematic].
 
-The seven 10 kΩ pull-downs are proposed motor-off defaults, not proven safety
-parts. They do not meet the documented A2 E9 affected-input workaround of
-8.2 kΩ or less. Check silicon and reset voltages before VM is connected; revise
-the circuit if logic low is not guaranteed. [RP2350 errata][rp2350]
+The seven 4.7 kΩ pull-downs are proposed motor-off defaults, untested until
+measured. Buy ±5% or better: the highest resistance at +5% is 4.935 kΩ,
+about 40% below the A2 E9 external pull-down limit of 8.2 kΩ. This checks
+the resistor value, not the whole circuit. Keep the A2/A4 silicon check and
+measure STBY and every motor input at boot/reset with VM disconnected;
+revise the circuit before motor power if logic low isn't assured.
+[RP2350 errata][rp2350], [reset checks](wiring.md#motor-driver-and-reset-defaults)
 
 Use BB48 computer USB for the first counter. Later give it its own checked
 USB bank lead. Never combine external VSYS with USB; keep Radxa pins 2/4
