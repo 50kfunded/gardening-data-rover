@@ -1,115 +1,122 @@
 # Software preparation
 
-**Planned and hardware-untested.** The counter firmware builds and the computer
-tests pass. No firmware has been uploaded, no real UART recording has been
-made and no hardware milestone has passed. All invented test inputs and saved
-test files are labelled SIMULATED DATA.
+**Planned and hardware-untested.** BB48 counter firmware builds on the
+computer, and the native/logger/simulation checks pass with SIMULATED inputs.
+No upload, real UART recording or hardware milestone has passed.
 
 ## Setup on Windows
 
-Use a terminal in the repository root. There is no need to install Linux on
-the computer. Use a virtual environment so these dependencies stay separate:
+Use a terminal in the repository root and keep dependencies in a virtual
+environment. Don't commit local settings, recordings or build output.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .\.venv\Scripts\python.exe -m simulation.check
 .\.venv\Scripts\python.exe -m pi.check
-.\.venv\Scripts\python.exe -m platformio run -d firmware -e nucleo_g474re
+.\.venv\Scripts\python.exe -m analysis.check
+.\.venv\Scripts\python.exe -m platformio run -d firmware -e olimex_pico2bb48
 ```
 
-The original simulation needs no extra packages. The serial checks use
-pyserial 3.5. The checked build uses PlatformIO 6.2.0, ST STM32 platform
-20.0.0 and STM32duino 3.0.0. `firmware/platformio.ini` uses the documented
-Nucleo configuration; the platform is not pinned, so record resolved versions.
-Build output, virtual environments, local config
-and normal run folders are ignored. Do not commit recordings or settings.
+The serial checks use pyserial 3.5 and PlatformIO 6.2.0. The Git platform URL
+selects the Arduino-Pico BB48 environment, not the stock Mbed Pico target.
+It is unpinned, so record resolved versions. [Core PlatformIO guide][pio]
+
+The 13 October 2026 computer build resolved platform 1.20.0 at `5d4561a`,
+Arduino-Pico package 1.60100.0 at `fd65f6d4`, and toolchain
+5.160100.260719. It produced a UF2 with 9,608 bytes RAM and 40,844 bytes flash
+reported; PSRAM was disabled. These are software build figures, not board tests.
+
+On Linux use `python3 -m pi.check` and `python3 -m simulation.check` from the
+root, without `-I`. On Windows use the actual Python 3 executable above if
+the `python3` name is only a Microsoft Store shortcut.
 
 ## Native C++ tests
 
-PlatformIO's native environment needs GCC on the computer; it does not install
-that compiler itself. On Windows, use a GCC/MinGW-w64 installation such as
-[MSYS2](https://www.msys2.org/). In the MSYS2 UCRT64 terminal, install:
-
-```sh
-pacman -S --needed mingw-w64-ucrt-x86_64-gcc
-```
-
-Back in PowerShell, add the standard compiler location for this terminal only:
+The unchanged native environment needs desktop GCC on PATH. Use a local
+GCC/MinGW installation such as [MSYS2](https://www.msys2.org/), or a portable
+compiler. Add its `bin` directory to this terminal's PATH, then run:
 
 ```powershell
-$env:Path = "C:\msys64\ucrt64\bin;$env:Path"
 gcc --version
 .\.venv\Scripts\python.exe -m platformio test -d firmware -e native
 ```
 
-Adjust the path if MSYS2 was installed elsewhere. A portable GCC/MinGW-w64
-build also works when its `bin` directory is on PATH. The native checks run
-on the computer and use simulated values. They need no Nucleo or serial adapter.
-See [PlatformIO's native guide](https://docs.platformio.org/en/latest/platforms/native.html).
+The eight native tests exercise pure protocol functions with SIMULATED DATA
+and commands only. No board/adapter is needed. The native environment does
+not install GCC itself. [PlatformIO native guide][native]
 
-## Milestone 1 when the Nucleo arrives
+## Milestone 1 when the BB48 arrives
 
-First check the delivered board says NUCLEO-G474RE and record its MB1367
-revision. This firmware selects `nucleo_g474re`, Arduino and the built-in
-ST-LINK upload method. It has been compiled on the computer only.
+**Planned pass test, still pending.** Confirm base RP2350-PICO2-BB48 rather
+than BB48R, inspect headers/revision and record A2/A4 silicon as checked or
+unknown. Identification must be compared with the official errata; a board
+revision letter is not the chip stepping. Do not change OTP or boot settings.
 
-**Wiring for this milestone:** one data-capable Micro-B USB cable from the
-computer to CN1 on the Nucleo. Leave all header wires disconnected, including
-motor power, sensors and the Radxa. No external UART adapter is needed. Use
-one power source only; do not add a bank or header supply alongside USB.
-Check default jumpers and bridges against the schematic for the delivered
-revision. Do not move a jumper based on this plan; UM2505 uses inconsistent
-JP2/JP5 names in its power sections.
+Use one data-capable USB-C cable from the computer. Disconnect all header
+wires, motor batteries, sensors and Radxa. No USB-to-TTL adapter is needed.
+Keep one supply only; no external VSYS alongside USB. [Olimex manual][manual]
 
-List the available ports:
+List ports before/after connection:
 
 ```powershell
 .\.venv\Scripts\python.exe -m serial.tools.list_ports
 ```
 
-Use the actual ST-LINK virtual COM port in place of the example `COM7` below.
-These upload and monitor commands are planned, not run against hardware yet:
+Use the actual BB48 USB serial port, not an assumed `COM7`. The board
+definition uses `picotool`. For first upload, enter BOOTSEL using BOOT held
+while pressing/releasing RESET, then release BOOT; confirm the ROM device
+is detected. Check the delivered controls against the manual. These actions
+are planned and have not been run on hardware.
 
 ```powershell
-.\.venv\Scripts\python.exe -m platformio run -d firmware -e nucleo_g474re -t upload
+.\.venv\Scripts\python.exe -m platformio run -d firmware -e olimex_pico2bb48 -t upload
 .\.venv\Scripts\python.exe -m platformio device monitor --port COM7 --baud 115200
 ```
 
-**Pass test, still pending:** see `Counter: 0`, `Counter: 1`, `Counter: 2` and
-continued increases for 30 seconds at about one count per second. If the
-monitor missed zero, press RESET once and watch again. **Fail:** no output, unreadable
-text, repeated unexpected resets or a stopped counter. Record what happened
-and ask for help before connecting anything else. A successful build alone
-does not pass this test.
+The upload and running USB device may have different identities. Re-list
+ports after upload/reset. If `picotool` isn't accessible on Windows, stop and
+check its driver/setup instructions; don't install an arbitrary driver over
+the running COM device. Copying the built UF2 to the ROM mass-storage device
+is a possible documented fallback, also untested here. [Upload guide][pio]
 
-The checked core maps `Serial` to LPUART1 on PA2 TX / PA3 RX, routed to the
-ST-LINK VCP by default. The counter is diagnostic text, not T telemetry or
-garden data. USART1 on D1 / PC4 TX and D0 / PC5 RX is reserved for the Radxa
-and remains uninitialised. The pure protocol functions are later preparation.
-D/STOP and T lines will use the VCP for PC tests and USART1 for the Radxa later;
-that transport firmware is not written yet. See [Windows serial notes](windows_uart.md)
-and the [proposed pin plan](../hardware/wiring.md).
-Do not continue to motors until the actual counter result is reviewed.
+**Pass later:** increasing `Counter: 0`, `Counter: 1`, `Counter: 2` and onward
+for 30 seconds, about once per second. If zero was missed, press RESET,
+reopen the actual port if needed and watch again. **Fail:** no output,
+unreadable text, unexpected resets or a stopped counter. Record/review the
+result before wiring motors. A build alone does not pass this.
+
+`Serial` is native USB. The 115200 setting doesn't clock USB. UART0 `Serial1`
+on GPIO0/1 remains uninitialised. The current counter isn't T telemetry and
+ignores commands. Later USB protocol and UART transports still need writing;
+the same T/D/STOP format applies, with one active command source.
+[Serial documentation][serial], [BB48 variant][variant]
+
+Before motor power, test STBY and all driver input pull-downs at boot/reset
+with VM disconnected. Before sensor collection, verify 12-bit ADC setup,
+measured reference/output limits and motors-off/on noise. Before the Radxa
+link, check its overlay/device name and test the crossed UART wiring.
+[Pin plan](../hardware/wiring.md), [build checks](plan.md)
 
 ## What the logger checks now
 
-`python -m pi.check` covers simulated loopback, missing sensor cells, malformed
-frames, the 256-byte boundary, fragmented reads, counter resets, disconnects
-and D/STOP writes. It uses temporary folders and labels every saved file as
-simulation. Hardware operation, timing, power and camera capture remain untested.
+The 18 logger/sender tests use simulated loopback and fake chunks, covering
+empty cells, malformed/oversized frames, fragmented reads, counter resets,
+disconnects and D/STOP writes. Temporary recordings are labelled SIMULATED.
+The unchanged schema is version 2 with `controller_*` time names. No counter,
+checksum, light field or boot message is added.
 
-The later logger will record a receive-time anchor for each split run. For
-a controller time `t_ms`, a rough UTC estimate is:
+For `t_ms`, a rough receive-anchored UTC estimate remains:
 
 ```text
 first_received_unix_s + (t_ms - controller_first_ms) / 1000
 ```
 
-Dividing by 1000 converts milliseconds to seconds. This estimate still includes
-unknown UART delay and clock drift, so it is not a checked timing result.
+It includes unknown transport delay/drift. Older metadata needs a separate
+migration; no migration is part of this controller change.
 
-`controller_first_ms` is the first accepted controller boot-time value in
-that split run. Metadata schema version 2 uses controller names throughout.
-Older version 1 recordings need a separate migration before the current
-reader can accept them. The telemetry columns and messages are unchanged.
+[pio]: https://arduino-pico.readthedocs.io/en/latest/platformio.html
+[native]: https://docs.platformio.org/en/latest/platforms/native.html
+[manual]: https://github.com/OLIMEX/RP2350-PICO2-BB48/blob/main/DOCUMENTS/RP2350-PICO2-BB48-user-manual.pdf
+[serial]: https://arduino-pico.readthedocs.io/en/latest/serial.html
+[variant]: https://github.com/earlephilhower/arduino-pico/blob/master/variants/olimex_pico2bb48/pins_arduino.h

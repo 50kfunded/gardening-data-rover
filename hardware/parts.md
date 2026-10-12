@@ -1,96 +1,73 @@
 # Prototype 1 parts
 
-I'm planning Prototype 1 around the Radxa ZERO 3W and NUCLEO-G474RE.
-**I've bought the Radxa board for £44 including shipping. No hardware has been
-tested or assembled into a rover.** The NUCLEO-G474RE was ordered from Anglia
-on 11 October 2026 at a listed £11.98 ex VAT. It has not arrived or been
-tested, and the VAT-inclusive invoice total is not confirmed. The C920 is
-already owned. The other figures are rough planning estimates, not checked shop prices, a live basket or a confirmed
-total. Delivery on the remaining orders, VAT, tools and module quality can change
-the amount.
+**Planned and untested. No hardware milestone has passed.** I'm keeping the
+Radxa ZERO 3W bought for £44 including shipping, and choosing the **base
+Olimex RP2350-PICO2-BB48 at £14.50, not yet bought**. The C920 is already owned.
+There is no assembled or tested rover. Other allowances are rough estimates,
+not current delivered quotes, and unknown costs stay unpriced.
 
-| Part | Cost or planning allowance | What to check |
+| Part | Cost or planning allowance | Status and checks |
 | --- | --- | --- |
-| Radxa ZERO 3W, planned configuration: 2 GB, soldered 40-pin header, no eMMC | £44 paid, including shipping | Bought, not tested. Check the exact variant and fitted header before wiring |
-| 32 GB A1 microSD card | £6–8 | Genuine card from a reliable seller |
-| USB microSD reader | £5–15 | Reads microSD and fits the computer's USB port |
-| Two data-capable USB-C male to USB-A female adapters | £4–8 for both | One for the C920 and one for a USB keyboard on USB-C 2 at different times |
-| USB-A to USB-C power cable | £3–5 | Power bank to the Radxa's USB-C 1; suitable for the planned 5 V / 2 A supply |
-| Micro-HDMI (type D) to HDMI cable | £4–8 | First boot and recovery with a monitor; not mini-HDMI |
-| USB keyboard | Borrow if possible; purchase price not estimated | USB connection for first boot |
-| Small heatsink for the Radxa | £2–5 | Heatsink fit and clearance have not been verified |
-| Inline USB power meter | About £8 | Matching connectors; data passes through when measuring the C920 |
-| ST NUCLEO-G474RE, real-time controller | £11.98 ex VAT listing; invoice total unconfirmed | Ordered from Anglia on 11 October 2026, not arrived or tested; check board revision |
-| Data-capable Micro-B USB cable for the Nucleo | Not priced yet; reuse a suitable cable if possible | Computer or separate bank output to CN1; ST-LINK programming and virtual COM port |
-| 2WD chassis, two 1:48 geared motors, wheels, caster, encoder discs, 4xAA holder | £10–20 | Both discs fit the motors and the wheel size suits the chassis |
-| Two LM393 slotted speed sensor modules, if not included | £2–4 | Slots fit the discs; modules work at 3.3 V |
-| TB6612FNG motor driver module | £3–5 | Genuine device; motor stall current is within its limits |
-| MPU6050 module | £2–4 | 3.3 V I2C compatibility |
-| BME280 temperature/humidity module | £3–6 | BME280, not a BMP280 which lacks humidity |
-| Capacitive soil moisture sensor | £2–4 | 3.3 V operation and analogue output within the measured ADC reference and Nucleo limits |
-| 10,000 mAh USB power bank, at least 5 V / 2 A on the output feeding the Radxa | £10–15 | Ideally two outputs so the Nucleo has its own lead; check per-output limits and that it stays on at the actual load |
-| Four AA NiMH cells and compatible charger | £10–15 | Cells match; holder polarity and charger suit NiMH |
-| Breadboard, mixed F-F/M-F/M-M jumper pack, 100 µF capacitor, Velcro and zip ties | £8–12 | F-F for Radxa/morpho male pins; M-F for Arduino female sockets to male pins; capacitor rating above motor supply |
-| 5 V / 3 A USB bench supply | £6–15 | Radxa recommends its Power PD30W adapter. This allowance is not a verified price for that model |
-| Multimeter, optional but useful | £8–12 | Continuity and voltage ranges |
-| DSD TECH SH-U09C5 or suitable 3.3 V USB-serial adapter, optional Radxa console fallback | £5–10 planning allowance, exact price unconfirmed | Verify 1,500,000 baud and TX logic voltage; power wire disconnected. Not needed for the Nucleo VCP |
-| Small USB data hub, optional, type still to be decided | Not bought. Example seen: [TP-Link UH400 at Argos](https://www.argos.co.uk/product/8519294), £8.99 on 11 October 2026; delivery and local stock not shown | Decide after milestone 0 current checks. Bus-powered hub, C920 and Nucleo would share the Radxa's published 500 mA host budget; USB configuration and power still need testing. A powered hub needs a verified supply and upstream isolation. See [the untested proposal](../docs/power_plan.md#my-proposed-usb-host-fix) |
-| Logitech C920 webcam | Already owned | Test USB capture on the Radxa's USB-C 2 later |
+| Radxa ZERO 3W, 2 GB, fitted 40-pin header, no eMMC planned configuration | £44 paid including shipping | Bought, untested; verify exact variant and header |
+| Olimex RP2350-PICO2-BB48 **base** | £14.50 planning price | **Not yet bought, untested**; inspect headers, revision and A2/A4 silicon; not BB48R |
+| USB-C data/power cable for BB48 | Not priced; reuse a suitable data cable | Planned; computer USB first, separate bank output later |
+| Integral 64 GB microSD and UGREEN SD/microSD reader | Not repriced in this update | Planned choices; genuine card and usable USB reader; not tested |
+| Two USB-C male to USB-A female data adapters | Check the spares first; no purchase planned if suitable | One for C920, one for first-boot keyboard; confirm data support |
+| USB-A to USB-C Radxa power cable | £3–5 estimate | Bank to USB-C 1; check current rating and voltage drop |
+| Micro-HDMI type D to HDMI cable | £4–8 estimate | First boot/recovery; not mini-HDMI |
+| USB keyboard | Borrow/reuse | First boot only |
+| Small Radxa heatsink | £2–5 estimate | Fit/clearance and temperature untested |
+| Inline USB power meter | About £8 planning allowance | Not bought; correct connectors and data pass-through for C920; peak capture ability unknown |
+| 2WD chassis, two 1:48 motors, wheels, caster, encoder discs and 4xAA holder | £10–20 estimate | Disc fit, motor ratings, stall current and traction unverified |
+| Two LM393 slotted encoder modules, if absent from kit | £2–4 estimate | 3.3 V output/pull-ups; one pulse signal per wheel |
+| TB6612FNG driver | £3–5 estimate | Exact module, pull-ups and motor-current limits |
+| Seven 10 kΩ pull-down resistors | Not priced; not bought | One each for STBY, PWMA/PWMB and four direction inputs; reset-low check required, especially on A2 |
+| 100 nF ceramic capacitor for soil ADC | Not priced; not bought | GPIO40 to GND near ADC pin; settling/loading still untested |
+| MPU6050 | £2–4 estimate | I2C1 at 3.3 V |
+| BME280 | £3–6 estimate | Humidity-capable BME280, not BMP280; 3.3 V I2C |
+| Capacitive soil module | £2–4 estimate | Actual timer/regulator, 3.3 V operation and output/reference limits |
+| Analog light sensor | Not selected or priced | Reserve GPIO41; output must suit 3.3 V ADC |
+| USB power bank | £10–15 old planning allowance | Prefer a checked 5 V/3 A Radxa output, plus separate BB48 output; actual combined limits and stay-on unverified |
+| Four AA NiMH cells and matched charger | £10–15 estimate | Motor supply only; polarity/current capability |
+| Breadboard, mixed jumpers, 100 µF capacitor, straps and ties | £8–12 estimate | F-F for fitted BB48/Radxa pins; other types for modules; capacitor rating/polarity |
+| Spare USB-A bench charger/supply | Reuse spares; no wall charger purchase planned | Check 5 V current rating, cable and stable boot |
+| Multimeter | Borrow or £8–12 estimate | Voltage/continuity; required for the bring-up checks |
+| Logitech C920 | Already owned | Capture and USB-C 2 current untested |
+| DSD TECH SH-U09C5 or 3.3 V USB-to-TTL adapter | Optional fallback, not required for BB48 USB | Radxa console only after its own wiring check; verify 1,500,000 baud and 3.3 V TX; power wire stays disconnected |
+| Small USB hub | Not bought; type/price not selected | Optional after milestone 0. Hub+C920+BB48 share the published 500 mA bus budget unless separately powered with checked isolation |
 
-**Rough planning subtotal for the other priced, non-optional rows: £132–201,
-including the £44 Radxa. Add the Nucleo invoice total once it is confirmed.**
-The Nucleo listing was £11.98 ex VAT; its VAT-inclusive total and delivery are
-not confirmed here. I am not treating that listing as a delivered price.
-This subtotal assumes a borrowed keyboard, the existing C920 and separate
-LM393 modules. It excludes the optional multimeter, USB-serial adapter and hub,
-the unpriced Micro-B cable, soldering supplies, extra mounting parts and
-delivery on the remaining orders. The Radxa shipping is already included.
-This is a planning allowance, not a confirmed whole-build total.
-If the chassis includes the LM393 sensors, remove their separate allowance.
+Don't add these estimates into a claimed delivered build price. Components,
+tools, mounting, VAT and delivery aren't all known. The £14.50 BB48 figure is
+the agreed planning price, not a new live checkout quote.
 
-The original aim was roughly £100 for the test platform. The updated estimate
-doesn't show that a working rover can be built for that exact amount.
+## Dropped controller orders and ideas
 
-## Extras to allow for
+- **NUCLEO-G474RE: cancelled/dropped.** It is not the current controller and
+  is not recorded as received or tested. No replacement Nucleo order is planned.
+- **ELEGOO ESP32 two-pack / ESP32 order idea: dropped.** It is not needed for
+  this build. ESP32-P4 was considered but is not selected either.
+- A Micro-B controller cable is no longer the BB48 cable. Keep a spare if
+  useful elsewhere; BB48 needs USB-C. The `pi/` folder name stays unchanged.
 
-The USB microSD reader is included above because the computer needs one to flash
-the card. Basic soldering supplies could add another £10–25, also an unverified
-estimate outside the subtotal above. I'll borrow tools if possible.
+## Before wiring
 
-The Micro-B data cable still needs pricing. Small standoffs, screws, a top mounting
-plate and a camera bracket may add more, depending on what the chassis kit
-includes. Soldering and secure cable connections are needed before driving
-trials; a loose breadboard alone is a bench setup.
+The BB48 base has no PSRAM or microSD socket, so GPIO8/9/10/11 are available
+for the proposed motor plan. That is not true of BB48R. Check the delivered
+labels and headers against [Olimex's schematic][schematic].
 
-## Buying checks
+The seven 10 kΩ pull-downs are proposed motor-off defaults, not proven safety
+parts. They do not meet the documented A2 E9 affected-input workaround of
+8.2 kΩ or less. Check silicon and reset voltages before VM is connected; revise
+the circuit if logic low is not guaranteed. [RP2350 errata][rp2350]
 
-Check the actual board labels and seller photos before choosing a listing.
-Low-cost modules can have different pin layouts or substitute chips. A cheaper
-listing is not automatically the correct part, and old prices do not show
-present stock or delivery costs. Confirm the final basket before spending.
+Use BB48 computer USB for the first counter. Later give it its own checked
+USB bank lead. Never combine external VSYS with USB; keep Radxa pins 2/4
+disconnected until measured and reviewed. A hub is optional now, not needed
+to enable controller power. See [the power plan](../docs/power_plan.md).
 
-The USB-C adapters and any hub must carry data. The HDMI cable must be
-micro-HDMI (type D), not mini-HDMI. I haven't chosen or bought a hub. First
-measure the C920 and Nucleo, then check the shared USB budget and enumeration.
-The [USB host power proposal](../docs/power_plan.md#my-proposed-usb-host-fix)
-compares bus-powered and externally powered options. Radxa recommends its Power PD30W in the
-[preparation guide](https://docs.radxa.com/en/zero/zero3/getting-started/preparation).
+Secure boards, batteries, camera and leads before floor trials. A breadboard
+is a bench tool, not a proven moving-rover power connection. These mechanical
+and electrical checks remain planned and untested.
 
-I won't assume the Radxa's mounting holes match a Pi Zero. Mounting hole spacing
-and heatsink fit still need checking; see the [logic board plan](../docs/logic_board.md).
-
-The power bank feeds the Radxa through USB-C 1. The first Nucleo counter test
-uses computer USB. Powering it from the Radxa through a hub is a later,
-untested bench proposal; a separate bank lead needs a verified standalone
-power selection. Check its USB power-source selection on the
-actual board revision before moving any jumper; the manual uses inconsistent
-JP2/JP5 names. The AA pack powers only the motors through the driver, with a
-shared ground. The [planned wiring](wiring.md) now records the Radxa power
-and UART connections. It is untested; do the milestone 0 board checks before
-connecting the UART.
-
-The built-in ST-LINK replaces the need for a separate programmer and PC UART
-adapter. The previous two-pack controller is no longer on the planned list.
-Nothing here confirms module compatibility, standalone power or a hardware pass.
-See [ST UM2505](https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf)
-for Micro-B USB, connector types and power-source checks.
+[schematic]: https://github.com/OLIMEX/RP2350-PICO2-BB48/blob/main/HARDWARE/RP2350-PICO2-BB48.REV.A/PICO2-BB48_Rev_A.pdf
+[rp2350]: https://pip-assets.raspberrypi.com/categories/1214-rp2350/documents/RP-008373-DS-2-rp2350-datasheet.pdf

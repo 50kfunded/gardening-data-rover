@@ -21,5 +21,5 @@ unconfirmed. The £44 paid cost replaces that estimate. The other prices in the
   the [milestone 0 checks](plan.md#milestone-0-checks-before-wiring).
 
 The [wiring plan](../hardware/wiring.md) now uses Radxa USB power and UART3-M0.
-It is planned and untested. Keep the Nucleo on its own USB lead and do not use
+It is planned and untested. Keep the BB48 on its own USB lead and do not use
 header pins 2/4 as its power supply before measurement and supply-path checks.

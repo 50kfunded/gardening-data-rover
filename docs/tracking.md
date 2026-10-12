@@ -9,9 +9,9 @@ The computer simulation check passes.
 
 | Step | GitHub issue | Pass test |
 | --- | --- | --- |
-| 0 | [Set up the Radxa ZERO 3W](https://github.com/50kfunded/gardening-data-rover/issues/1) | SSH into the actual Radxa and record the serial, header voltage, C920 current, power bank and headless WiFi checks before wiring; keep the later Nucleo-on-Radxa USB check pending until the counter works |
-| 1 | [Print a Nucleo counter](https://github.com/50kfunded/gardening-data-rover/issues/2) | Increasing counter visible on the ST-LINK VCP at 115200 baud |
-| 2 | [Test both motors](https://github.com/50kfunded/gardening-data-rover/issues/3) | Forward/reverse at three PWM levels |
+| 0 | [Set up the Radxa ZERO 3W](https://github.com/50kfunded/gardening-data-rover/issues/1) | SSH into the actual Radxa and record the serial, header voltage, C920 current, power bank and headless WiFi checks before wiring; keep BB48 USB, silicon, ADC and reset-default checks pending |
+| 1 | [Print a BB48 USB counter](https://github.com/50kfunded/gardening-data-rover/issues/2) | Increasing counter on native USB at monitor setting 115200, once a second for 30 seconds |
+| 2 | [Test both motors](https://github.com/50kfunded/gardening-data-rover/issues/3) | Reset/boot STBY-low check before VM, then forward/reverse at three PWM levels |
 | 3 | [Count encoder ticks](https://github.com/50kfunded/gardening-data-rover/issues/4) | Repeated full turns give consistent counts |
 | 4 | [Drive straight with PID](https://github.com/50kfunded/gardening-data-rover/issues/5) | 2 m within 10 cm, three consecutive runs |
 | 5 | [Read the sensors](https://github.com/50kfunded/gardening-data-rover/issues/6) | Readings respond sensibly to controlled tests |
@@ -24,13 +24,16 @@ milestone 0 checks. Keep each hardware issue open while work is pending.
 Close it only after recording the actual pass evidence. Do not close an issue
 for a simulation result.
 
-The [later USB host bench check](plan.md#later-bench-check-nucleo-on-the-radxa-host)
-tests my proposed Nucleo power fix after the first counter result. Record
-ST-LINK enumeration and target power, actual serial paths, USB power
-declarations, USB-C 2 current with the C920 and Nucleo together, hub behaviour,
-and whole-bank current and stay-on. Reset/reboot checks happen with motors
-disconnected. The hub is not bought, the setup is untested and no issue can
-be closed from this research. See [the power proposal](power_plan.md#my-proposed-usb-host-fix).
+The [later BB48 bench checks](plan.md#later-bench-check-bb48-usb-and-radxa-uart)
+cover USB serial/reset paths, separate-source bank operation and the future
+crossed UART0 link to Radxa. Record A2/A4 silicon and 12-bit ADC behaviour with
+motors off/on. Test the seven driver pull-downs with VM disconnected before
+motor power; 10 kΩ is not a guaranteed A2 E9 workaround.
+
+If a hub is considered, measure USB-C 2 with C920 and BB48 together, USB
+declarations, back-feed, sustained behaviour and bank stay-on. The hub is not
+bought or required for BB48 power. All checks remain pending; none closes an
+issue without real evidence. [Power proposal](power_plan.md#my-proposed-usb-host-fix)
 
 Soil insertion is manual in Prototype 1. The combined run does not establish
 automatic soil sampling. Readings without valid soil contact stay missing.

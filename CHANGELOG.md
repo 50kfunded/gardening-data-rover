@@ -1,5 +1,17 @@
 # Changes
 
+## 2026-10-13: BB48 controller preparation
+
+- Selected base Olimex RP2350-PICO2-BB48 at £14.50, not yet bought. Nucleo and ESP32 order ideas are dropped; Radxa stays the computer.
+- Switched PlatformIO/Arduino-Pico and built the USB-only, once-a-second counter for `olimex_pico2bb48`.
+- Kept the native environment and pure protocol library unchanged. Updated USB/UART instructions and the sourced GPIO/diagram plan, including later reservations.
+- Planned seven 10 kΩ driver pull-downs, a 100 nF soil-input capacitor and an inline USB power meter. Added A2/A4, ADC motors-off/on, STBY reset and Radxa UART checks.
+- Replaced the old controller power procedure with BB48 USB/VSYS checks; kept Radxa's 500 mA host budget and optional hub measurements.
+- Updated related docs and recorded the choice/alternatives. Contract board wording changed only; columns, T/D/STOP, empty readings, 256-byte limit and metadata schema did not change.
+- Native, logger and simulation checks passed on the computer with simulated inputs. Hardware steps 0–8 remain pending; no upload or real measurement was made.
+
+Older entries below describe earlier plans/results, not the currently selected controller.
+
 ## 2026-10-12: Soil calibration preparation
 
 - Added pure Python two-point calibration, filtering, fault warnings and a quality score.

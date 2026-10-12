@@ -89,7 +89,7 @@ records will link to it; these notes do not implement or change the schema.
 | Device ID, hardware/firmware version and calibration ID | Trace changes between collection systems |
 | Anonymous garden ID, spot ID and plant/group ID | Keep repeated observations and dataset splits attached to their source |
 | Plant type, variety and growth stage where known | Interpret appearance and document what the dataset covers |
-| UTC visit time and valid Nucleo sampling interval | Connect photo and sensor observations |
+| UTC visit time and valid controller sampling interval | Connect photo and sensor observations |
 | Photo filenames, resolution, camera position and settings | Reproduce and compare views |
 | Raw soil value, probe depth, placement validity and reference method | Keep measurements separate from an assumed moisture label |
 | Air readings, sun/shade note and relevant sensor exposure | Describe the collection conditions |
@@ -112,7 +112,7 @@ measurement conventions for the current schema and possible later tests.
 | Quantity | Unit or convention |
 | --- | --- |
 | Visit and photo time | UTC with timezone; Unix seconds where used in filenames |
-| Nucleo elapsed time | Milliseconds since boot, linked to a UTC anchor |
+| controller elapsed time | Milliseconds since boot, linked to a UTC anchor |
 | Wheel command and gyro Z | Radians per second, rad/s |
 | Raw encoders | Cumulative pulse counts; this single-channel hardware does not measure direction independently |
 | Accelerometer readings | Metres per second squared, m/s^2, including gravity |
@@ -176,7 +176,7 @@ evaluation matter. See
 
 ## Where the work happens
 
-The Nucleo handles real-time motion and sensor reads. The Radxa collects local
+The controller handles real-time motion and sensor reads. The Radxa collects local
 files and can later upload them over WiFi. Heavier analysis and model training
 happen on the PC or laptop; its available hardware determines what is practical.
 A small deployable model could be considered later after performance tests.

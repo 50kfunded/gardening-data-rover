@@ -17,12 +17,11 @@ Soil calibration helpers pass SIMULATED tests for a relative wetness index,
 filtering and fault warnings. The references, limits and insertion procedure
 remain planned and untested on hardware. See [the soil plan](docs/soil_calibration.md).
 
-The Radxa ZERO 3W has been bought for £44 including shipping. It has not been
-tested, and no rover has been built. The NUCLEO-G474RE was ordered on
-11 October 2026 from Anglia at a listed £11.98 ex VAT. The VAT-inclusive
-invoice total is unconfirmed; it has not arrived or been tested. The other
-parts are still planned, apart from the already-owned C920. See [the parts list](hardware/parts.md) and
-[logic board plan](docs/logic_board.md).
+The Radxa ZERO 3W is bought for £44 including shipping, but untested. The
+planned controller is the **base Olimex RP2350-PICO2-BB48, £14.50, not yet
+bought**. NUCLEO-G474RE and the ESP32 order ideas are dropped. The C920 is
+already owned. No rover is assembled. See [parts](hardware/parts.md) and
+[controller choice](docs/controller_choice.md).
 
 ## Folder roles
 
@@ -48,26 +47,38 @@ and boot identification remain [proposals](docs/protocol_proposals.md), not code
 
 ## Planned architecture
 
-NUCLEO-G474RE is planned to handle motors, encoder interrupts and sensors with
-a 100 Hz control loop. Radxa ZERO 3W is planned for UART logging, drive commands and a USB
-C920 camera. UART is proposed at 115200 baud with text lines. Telemetry begins at
-10 Hz, separately from the control update rate.
+Base BB48 handles motor signals, single-pulse encoders and sensors in a later
+100 Hz control loop. Radxa handles commands, recording and the C920. Counter
+firmware only prints once a second on native USB `Serial`; no control loop,
+ADC, motor command or timeout is implemented by that milestone.
 
-Wheel command units are rad/s. Encoder values are raw cumulative counts,
-not signed positions. Soil values are raw ADC counts, not moisture percent.
-Unavailable sensor fields stay blank and unknown calibration stays `null`.
-See [the contract](docs/data_contract.md) before changing a field or unit.
+UART0 `Serial1` GPIO0 TX / GPIO1 RX is reserved for Radxa UART3-M0 physical
+3 RX / 5 TX / 6 GND, 3.3 V, 115200 8N1. Enable Radxa's overlay through
+`rsetup`; `/dev/ttyS3` is expected but unconfirmed. I2C1 `Wire1` uses GPIO2/3,
+driver GPIO6–12, encoders 14/15 and ADC0/1 GPIO40/41. Leave QWST empty because
+its default I2C pins share GPIO12 STBY. Later pins are only reservations.
 
-Motor power is a separate AA pack; the logic/camera power bank shares ground.
-The camera is planned for the Radxa's USB-C 2 through a data-capable adapter.
-The Nucleo is planned on its own USB lead, with no supply from Radxa header
-pins 2/4. The [wiring document](hardware/wiring.md) uses UART3-M0 on physical
-pins 3 RX, 5 TX and 6 GND, crossed to USART1 D1 / PC4 TX and D0 / PC5 RX
-at 3.3 V. The PC counter uses the separate ST-LINK VCP, LPUART1 PA2/PA3.
-Enable the Radxa overlay in
-`rsetup`; `/dev/ttyS3` is expected but unconfirmed. The wiring is planned and
-untested. Do the [milestone 0 checks](docs/plan.md#milestone-0-checks-before-wiring)
-before connecting the UART.
+Wheel commands stay rad/s, raw encoder counts cumulative, soil 12-bit raw
+0–4095, missing readings empty and unknown calibration null. No new light
+column, counter, checksum or schema version is added. Keep
+`firmware/lib/rover_protocol/` unchanged. [Contract](docs/data_contract.md)
+
+BB48 uses its own USB-C lead, computer USB first and separate bank output
+later. Never combine external VSYS with USB. Keep Radxa header 2/4 disconnected
+until measured/reviewed. C920 uses USB-C 2; keep the published 500 mA budget
+and measure any optional hub arrangement. There is no host-handshake power
+fix required for BB48's documented path, but actual startup/stay-on are untested.
+
+Record A2/A4 silicon and ADC repeatability with motors off/on. Seven planned
+10 kΩ pull-downs at TB6612 STBY/PWM/direction inputs need a boot/reset/BOOT
+test with VM disconnected. 10 kΩ isn't the guaranteed A2 E9 workaround;
+revise the circuit before motor power if logic low isn't assured. Add a
+planned 100 nF soil-input capacitor and an inline USB meter to the parts plan.
+Later firmware needs local timeout/rearm and a separate physical motor e-stop.
+
+[Wiring](hardware/wiring.md), [bring-up](docs/plan.md), [power](docs/power_plan.md)
+and [software setup](docs/software_prep.md) are planned and untested. Hardware
+steps 0–8 remain pending regardless of computer build/test results.
 
 ## Boundaries for the first build
 

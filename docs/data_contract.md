@@ -28,11 +28,11 @@ the run's `photos/` directory.
 
 | CSV column | Meaning and unit | Source on the future rover |
 | --- | --- | --- |
-| `t_ms` | Milliseconds since Nucleo boot, unsigned integer | Nucleo monotonic clock |
-| `cmd_left` | Active requested left wheel angular speed, rad/s | Target accepted by the Nucleo |
-| `cmd_right` | Active requested right wheel angular speed, rad/s | Target accepted by the Nucleo |
-| `enc_left` | Cumulative left pulse count since Nucleo boot | Left LM393 interrupt |
-| `enc_right` | Cumulative right pulse count since Nucleo boot | Right LM393 interrupt |
+| `t_ms` | Milliseconds since controller boot, unsigned integer | controller monotonic clock |
+| `cmd_left` | Active requested left wheel angular speed, rad/s | Target accepted by the controller |
+| `cmd_right` | Active requested right wheel angular speed, rad/s | Target accepted by the controller |
+| `enc_left` | Cumulative left pulse count since controller boot | Left LM393 interrupt |
+| `enc_right` | Cumulative right pulse count since controller boot | Right LM393 interrupt |
 | `gyro_z` | Angular velocity about body Z, rad/s | MPU6050, converted to this unit |
 | `accel_x` | Body X accelerometer reading, m/s^2, with gravity included | MPU6050 |
 | `accel_y` | Body Y accelerometer reading, m/s^2, with gravity included | MPU6050 |
@@ -57,8 +57,8 @@ signed distance from them without explaining a direction assumption.
 
 ## The messages
 
-The proposed Nucleo-to-Radxa line includes the active commands so we do not mistake
-the last command sent by the Radxa for one actually accepted by the Nucleo:
+The proposed controller-to-Radxa line includes the active commands so we do not mistake
+the last command sent by the Radxa for one actually accepted by the controller:
 
 ```text
 T,t_ms,cmd_left,cmd_right,enc_left,enc_right,gyro_z,accel_x,accel_y,soil_raw,temp_c,humidity_pct
@@ -109,8 +109,8 @@ each byte occupies 10 bit periods including start and stop. The theoretical
 capacity is 115200 / 10 = 11520 bytes/s in each direction. At our maximum
 256-byte line size, 10 telemetry lines/s use at most 2560 bytes/s, leaving
 room in the link. This is a link-budget calculation, not measured performance.
-See [ST UM2505](https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf)
-for the planned Nucleo serial routes. This calculation does not verify hardware timing.
+See [the planned BB48 wiring](../hardware/wiring.md)
+for the USB and UART routes. This calculation does not verify hardware timing.
 
 The hardware `t_ms` is elapsed boot time, not a date. On the Radxa we will
 record a start-time anchor to relate it to UTC photo times and measure the
@@ -118,7 +118,7 @@ alignment error. `date` and `started_unix_s` in this simulation describe when
 the computer generated the files; they are not a hardware clock synchronisation.
 The virtual clock begins at zero; samples are 100, 200, ..., 30000 ms.
 
-A hardware run must not silently continue through a Nucleo reboot, counter
+A hardware run must not silently continue through a controller reboot, counter
 reset or a 32-bit millisecond rollover (about 49.7 days). We will split or
 explicitly handle these events when implementing the live UART logger. S0's
 checker expects an uninterrupted, perfectly spaced simulation only.

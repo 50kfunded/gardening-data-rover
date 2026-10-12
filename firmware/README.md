@@ -1,52 +1,51 @@
-# Nucleo firmware
+# BB48 firmware
 
-**Planned and hardware-untested.** The only firmware milestone written is the
-USB counter for milestone 1. The documented configuration builds on the
-computer, but has not been uploaded or run on a NUCLEO-G474RE. No hardware
-milestone has passed.
+**Planned and hardware-untested. No hardware milestone has passed.** The base
+Olimex RP2350-PICO2-BB48 replaces the earlier controller plans. Milestone 1
+only prints an increasing counter once a second on native USB `Serial`.
+There are no motor, encoder, sensor or live protocol transports yet.
 
-`platformio.ini` selects `platform = ststm32`, `board = nucleo_g474re`,
-`framework = arduino`, `upload_protocol = stlink` and `monitor_speed = 115200`.
-The computer build used PlatformIO 6.2.0, ST STM32 platform 20.0.0 and
-STM32duino 3.0.0. The platform is not pinned, so check the resolved versions
-when building again. See [PlatformIO's board page](https://docs.platformio.org/en/stable/boards/ststm32/nucleo_g474re.html).
+```ini
+[env:olimex_pico2bb48]
+platform = https://github.com/maxgerhardt/platform-raspberrypi.git
+board = olimex_pico2bb48
+framework = arduino
+monitor_speed = 115200
+```
 
-In that core's `variant_NUCLEO_G474RE.h`, `Serial` uses LPUART1
-(`SERIAL_UART_INSTANCE = 101`), PA2 TX and PA3 RX. ST's default routing
-connects these to the ST-LINK virtual COM port. Check the actual board
-revision and solder bridges on arrival; do not change them for this milestone.
-`src/main.cpp` prints an increasing counter at 115200 baud once a second.
-USART1 on D1 / PC4 TX and D0 / PC5 RX is reserved for the later Radxa link
-and is not initialised here. There is no motor or sensor code.
+The [board definition][board] selects Arduino-Pico and `picotool` upload.
+`Serial` is native USB; 115200 is the monitor setting, not a USB bit clock.
+`Serial1` is UART0 GPIO0 TX / GPIO1 RX for the later Radxa link and stays
+uninitialised now. `Wire1` GPIO2/3 is reserved for later I2C sensors.
+[USB/UART documentation][serial], [BB48 variant][variant]
 
-The mapping comes from the installed official
-[Arduino core variant at 3.0.0](https://github.com/stm32duino/Arduino_Core_STM32/blob/3.0.0/variants/STM32G4xx/G473R%28B-C%29T_G473RETx%28Z%29_G474R%28B-C-E%29T_G483RET_G484RET/variant_NUCLEO_G474RE.h) and
-[ST's UM2505, section 7.10 and tables 10/11](https://www.st.com/resource/en/user_manual/um2505-stm32g4-nucleo64-boards-mb1367-stmicroelectronics.pdf).
-The [wiring plan](../hardware/wiring.md) reserves the VCP, SWD and SWO pins.
-
-`lib/rover_protocol/` holds pure telemetry formatting and D/STOP parsing
-functions. They make no hardware calls and are not called by milestone 1.
-Missing sensor fields stay empty. Lines include a newline and must fit within
-256 bytes. Speeds are rad/s, not PWM. Numeric output uses six decimal places;
-soil ADC counts stay integers. Invalid input returns failure, not a partial line.
-
-The parser checks syntax and finite numbers. Physical speed limits, command
-timeout behaviour and motor control still need their later milestone. A parsed
-STOP is only a value here; it does not operate any motor.
+The Git platform URL is intentionally not pinned. Record resolved platform,
+core and toolchain versions on each build. A computer build is not an upload,
+hardware result or milestone pass.
 
 From the repository root, after [software setup](../docs/software_prep.md):
 
 ```powershell
-.\.venv\Scripts\python.exe -m platformio run -d firmware -e nucleo_g474re
+.\.venv\Scripts\python.exe -m platformio run -d firmware -e olimex_pico2bb48
 .\.venv\Scripts\python.exe -m platformio test -d firmware -e native
 ```
 
-The native environment needs a desktop GCC toolchain. Its eight tests use
-**SIMULATED DATA and commands only**. They do not measure timing or pass any
-hardware milestone. See [the Windows setup notes](../docs/software_prep.md).
+The native environment and `lib/rover_protocol/` are unchanged. Its eight
+tests use **SIMULATED DATA and commands only**. Pure helpers retain T-line
+formatting, empty missing readings, 256-byte maximum and D/STOP parsing.
+They don't run a control loop or make STOP operate a motor.
 
-When the board arrives, use a data-capable Micro-B USB cable as its only power
-source. Leave all header wires disconnected. The
-[milestone 1 instructions](../docs/software_prep.md#milestone-1-when-the-nucleo-arrives)
-give the upload, serial monitor and pass test. Review the result before
-continuing to motor wiring.
+On arrival, use one USB-C data lead from the computer with header wires and
+motor power disconnected. Follow [milestone 1](../docs/software_prep.md#milestone-1-when-the-bb48-arrives)
+to upload and watch the counter. Identify the actual USB COM port; examples
+aren't defaults. BOOT/RESET can enter the ROM uploader; the running serial
+port may disappear/change on upload/reset. Check this on the board. No
+separate UART adapter is required for the planned USB counter.
+
+The [pin plan](../hardware/wiring.md) is for base BB48, not BB48R. Check silicon
+revision and motor-off pull-down behaviour before later wiring. Keep ADC
+resolution at 12 bits when that milestone is implemented.
+
+[board]: https://github.com/maxgerhardt/platform-raspberrypi/blob/develop/boards/olimex_pico2bb48.json
+[serial]: https://arduino-pico.readthedocs.io/en/latest/serial.html
+[variant]: https://github.com/earlephilhower/arduino-pico/blob/master/variants/olimex_pico2bb48/pins_arduino.h

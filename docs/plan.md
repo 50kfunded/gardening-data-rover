@@ -17,10 +17,11 @@ I ran the simulation and the checker myself. It passed with 300 valid rows,
 first two readings at 100 and 200 ms and shared them for review. The metadata
 is marked as simulation and the photos folder is present and empty.
 
-This passes the first software step. The hardware tests still need the parts.
-The NUCLEO-G474RE has been ordered, not received or tested. Counter firmware
-and serial logging are now prepared, with computer checks only. [Software preparation](software_prep.md) gives the instructions. No
-hardware milestone has passed; continue through the hardware steps one at a time.
+This passes the first software step. Hardware still needs the parts. The base
+Olimex RP2350-PICO2-BB48 is selected at £14.50, not yet bought or tested.
+The previous controller orders/ideas are dropped. Counter and serial software
+are prepared with computer checks only. [Software preparation](software_prep.md)
+gives the instructions. No hardware milestone has passed.
 
 ## The next planning step
 
@@ -42,8 +43,8 @@ These are planned tests. None have passed yet.
 | Step | What I will build | What counts as a pass |
 | --- | --- | --- |
 | 0 | Set up the Radxa Debian image for ZERO 3W, WiFi, SSH and the UART3-M0 overlay | SSH into the Radxa from the computer and record the checks below before wiring |
-| 1 | Make a small PlatformIO project for NUCLEO-G474RE with Arduino and ST-LINK | See an increasing counter over the ST-LINK virtual COM port at 115200 baud |
-| 2 | Connect the motor driver and test each motor at three PWM levels | Both wheels turn forwards and backwards as commanded; record any direction correction |
+| 1 | Build/upload the base BB48 counter with Arduino-Pico | Increasing counter on native USB serial at monitor setting 115200, once a second for 30 seconds |
+| 2 | Check seven driver pull-downs before VM, then test motors | STBY/input logic low at boot/reset; wheels lifted, both motors turn forwards/backwards at three PWM levels |
 | 3 | Count encoder pulses with interrupts | Several full turns by hand give a consistent count per wheel revolution; record both counts |
 | 4 | Control wheel speed with PID and test straight driving | Drive 2 m on a flat floor within 10 cm of the marked line, three runs in a row; save gains and results |
 | 5 | Read the IMU, temperature, humidity and raw soil value | Motion readings respond to tilting/turning; humidity responds to a breath; soil readings differ sensibly between dry and wet references |
@@ -60,95 +61,73 @@ separate attended visit, not an automatic capability of Prototype 1.
 
 ## Milestone 0 checks before wiring
 
-**Planned and untested.** Start with the Radxa on its own. Leave the Nucleo
-UART and motor wiring disconnected. Use the Radxa Debian image for ZERO 3W
-and record its exact version. For first boot, use power on USB-C 1, a monitor
-on micro-HDMI and a keyboard on USB-C 2 through a data adapter.
+**Planned and untested.** Start with Radxa on its own, BB48 header wires and
+motor power disconnected. Use the Radxa Debian image for ZERO 3W, record the
+image/kernel, power USB-C 1, and use micro-HDMI plus keyboard on USB-C 2 for
+first boot only. Set up WiFi/SSH and the UART3-M0 `rsetup` overlay, then reboot.
+Those are configuration changes; the inspection checks don't change settings.
 
-WiFi, SSH and the UART overlay need setting up first. Enable UART3-M0 through
-the `rsetup` overlays, then reboot. These setup actions change configuration;
-the checks below only inspect the result. Menu options and headless WiFi
-preconfiguration still need checking on the installed image. Do not assume
-`before.txt` works. If preconfiguration does not work, use the monitor and
-keyboard to set up WiFi and SSH, then check booting without them.
-
-| Read-only check | What I need to record |
+| Inspection or future bench check | What I need to record |
 | --- | --- |
-| Serial device and console use | Confirm which device belongs to UART3-M0. `/dev/ttyS3` is expected but unconfirmed. Inspect the boot arguments and serial getty services; the selected port must not be used by a console or getty. Seeing a device file alone does not prove its pin mapping. |
-| Header 5 V | Measure DC voltage at pins 2 and 4 relative to GND pin 6, with no external load connected. Record both values and the supply used. Use the meter's voltage mode, not current mode across the pins. Keep pins 2/4 disconnected from the Nucleo; voltage alone does not establish available current or protection. |
-| C920 current | Unplug the keyboard and connect the C920 to USB-C 2 through a data adapter. Use a data-capable inline USB meter to record its current while idle and capturing. Record the meter position and any voltage drops or capture failures. A USB descriptor is not a measured current. |
-| Power bank staying on | Check the Nucleo power-source selection against the board revision schematic first. Then test the bank, cables and separate Micro-B lead under idle and camera-capture loads. Record the test duration, current, voltage and any power-off or reset. A bench-supply test does not establish that the bank stays on. |
-| Headless WiFi | After a normal shutdown, boot without the monitor or keyboard and SSH in from the computer over WiFi. Record whether it works and how WiFi was configured. Keep network names and credentials out of Git. |
+| Serial device/console use | Actual UART3-M0 device, boot arguments and getty use. `/dev/ttyS3` remains unconfirmed; seeing a file alone doesn't verify pins. |
+| Header 5 V | Pins 2/4 relative to GND 6, no external load. Meter in voltage mode, not current across pins. Keep 2/4 disconnected from BB48; voltage alone doesn't prove current allowance. |
+| C920 current | Data-capable inline meter on USB-C 2; idle, startup/capture, voltage and failures. Record instrument limits; descriptors aren't measured current. |
+| Power bank stay-on | Each output and both together; Radxa idle/capture and BB48 alone on its own USB-C lead. Record duration, lowest load, voltage, reset/shutoff and recovery. No host-handshake workaround is assumed for BB48. |
+| Headless WiFi | Normal shutdown, boot without monitor/keyboard, then SSH. Record the method without credentials or network identifiers. |
+| BB48 identity | Base version, headers/PCB revision and A2/A4 silicon. Package markings/read-only chip identification against official docs; unknown stays unknown. Don't alter OTP. |
+| ADC groundwork | Measure 3V3/analog reference and disconnected sensor output. Later at milestone 5 compare 12-bit batches with motors off/on, settling and 100 nF loading; don't invent a reference or noise result. |
 
-These are future inspection commands to run **on the Radxa**, not in Windows
-PowerShell. The serial commands help identify the port and console use:
+These future read-only commands run **on Radxa**, not Windows:
 
 ```sh
 ls -l /dev/ttyS*
 cat /proc/cmdline
 systemctl list-units --all 'serial-getty@*'
-```
-
-Once the camera tools are installed, inspect the USB/video devices and network
-state without changing settings:
-
-```sh
 lsusb
 v4l2-ctl --list-devices
 nmcli -t -f DEVICE,TYPE,STATE device status
 ```
 
-Review command output before sharing it. Keep the selected serial port as a
-configuration setting in the future logger. Avoid Radxa pins 8/10, the UART2
-debug console, and pins 27/28. The main UART3-M0 and fallback wiring is in
-[the planned wiring](../hardware/wiring.md). No checks above have passed yet.
+Check commands on the installed image and review output before sharing. Port
+is a config setting with no default. Avoid Radxa 8/10 and 27/28. Main route
+and fallbacks are in [the untested pin plan](../hardware/wiring.md).
 
-## Later bench check: Nucleo on the Radxa host
+## Later bench check: BB48 USB and Radxa UART
 
-**Planned and untested.** This is my proposed USB power fix, not a hardware
-pass. Start after the Radxa boots reliably and the milestone 1 counter has
-been checked on computer USB. Motors stay disconnected. The pin table and
-planned UART link stay unchanged. See [the research and open questions](power_plan.md#my-proposed-usb-host-fix).
+**Planned and untested.** First pass/review the computer USB counter in
+milestone 1. BB48 native USB is also the future PC protocol route; UART0
+GPIO0/1 is the later Radxa route. Its power path doesn't require a host to
+enable target power, but startup and bank stay-on haven't been tested.
+See [the power plan](power_plan.md#my-proposed-usb-host-fix).
 
-First try the Nucleo alone on Radxa USB-C 2 using its Micro-B data lead and
-the data adapter. Keep the verified default Nucleo power selection. Record
-whether ST-LINK enumerates, target power turns on and the counter is visible.
-Measure the C920 separately before choosing a hub. The combined setup would
-put both devices on the hub, with the Radxa powered through USB-C 1.
-
-| Proposed check | What I need to record |
+| Future bench check | What I need to record |
 | --- | --- |
-| USB identity and power declarations | Exact OS/kernel, board revision, ST-LINK version, hub model, USB tree, available interfaces and each device's declared power. Check for configuration errors; low measured current alone does not prove enumeration will work. |
-| Nucleo VCP | Actual `/dev/ttyACM*` path and any `/dev/serial/by-id/` link. Use the actual path as logger configuration. Check permissions. Do not assume `/dev/ttyACM0` is permanent. |
-| USB-C 2 with both devices | Data-capable meter upstream of the hub; idle, startup and simultaneous counter/camera capture current and voltage. Record meter limits. Compare against Radxa's published 500 mA budget, not the load-switch calculation. |
-| Hub behaviour | Both devices configure and stay connected during a sustained capture test. Record USB errors, capture failures and counter gaps. For a powered hub, verify its specified supply and check upstream back-feed with boards disconnected before connecting it. Stop if isolation is unclear. |
-| Whole bank output | Measure at USB-C 1 with all downstream loads attached. Do not add those loads twice. Record voltage drop, average current, any captured peaks and lowest-load stay-on duration, including any timed mode. |
-| Reset and reboot | With motors disconnected, compare the Nucleo target reset, a normal Radxa reboot and a controlled USB unplug. Record target power, ACM/by-id paths and counter restart. An open serial handle may need reopening; the logger currently stops on errors. |
-| Power bank recovery | Check idle, capture, normal shutdown and restart. Record whether the chosen output shuts off and whether it restarts. The Radxa keeping a bank awake remains unverified. |
+| USB counter and identity | Actual COM or `/dev/ttyACM*`, any by-id link, USB identity/current declaration, board and OS. Counter text is not T telemetry. |
+| Reset/unplug/BOOT | Whether native USB disappears/re-enumerates, counter restart and port changes. The logger stops on serial errors; don't hide a reboot with automatic reconnect. |
+| Crossed UART | Later firmware only: GPIO0 TX to Radxa 3 RX, GPIO1 RX from 5 TX, GND to 6. Verify 3.3 V, UART3-M0 device and 115200 8N1, then real T/D/STOP and reset/run boundaries at milestone 6. |
+| Optional host/hub | Only after separate currents are known. BB48 alone on USB-C 2 first, then hub+C920+BB48; record enumeration, sustained capture, current/voltage and errors. Published 500 mA is the limit to plan against, not the 1.45 A protection calculation. |
+| Powered hub | Check its supply and upstream back-feed before connecting boards. It can keep BB48 powered when Radxa is off; no automatic motor safety follows. |
+| Whole-bank output | Include all downstream loads once; separate BB48 bank output needs its own measurement. Record per-output limits, drop, startup and lowest-load stay-on. |
+| Motor-off defaults before VM | Seven 10 kΩ pull-downs at STBY/PWM/direction inputs. Measure logic low during power-up, reset, BOOT and disconnect, with VM disconnected. Check A2 E9 caveat; revise the circuit if needed before motor power. |
 
-The first measurements can be made without a hub. Borrow one for the combined
-bench check if possible. Do not buy a bus-powered hub if the current or
-advertised power budget cannot fit; an externally powered bench hub is a
-separate option, with its own supply and isolation checks. This is a proposal
-based on the [sourced power plan](power_plan.md), not a passed test.
+The first measurements don't need a hub. No hub is bought or required for
+BB48 power. If shared USB current/declarations don't fit, retain separate
+controller power/UART rather than assuming a stronger bank changes USB-C 2.
+One BB48 supply at a time; external VSYS must not be combined with USB.
 
-These inspection commands run on the Radxa. They do not flash the Nucleo,
-mount a disk or change settings. A missing glob or permission message is a
-result to record, not a reason to invent a device name:
+On Radxa, future USB inspection commands are:
 
 ```sh
 lsusb
 lsusb -t
 lsusb -v
 ls -l /dev/ttyACM* /dev/serial/by-id/
-lsblk
 ```
 
-Review the output before sharing it. Keep device serial IDs and any personal
-information out of public notes. The serial logger still needs real T lines
-later; milestone 1's counter text is not telemetry and will not pass its
-parser. D/STOP and T lines keep the existing contract. No sensor values or
-hardware results are generated by this checklist.
+A stable path doesn't preserve an open handle through disconnect. BOOTSEL's
+mass-storage device is for uploading firmware, not logging garden data.
+Keep identifiers private. No check here has passed and no sensor data is
+generated by this checklist.
 
 ## Measurements to keep
 
@@ -204,8 +183,8 @@ These documents are an overview; the next build step still waits for its pass.
 interrupts in milestone 3. Direction comes from the accepted command only as
 an assumption; coasting and reversal can break it. Keep raw counts unsigned.
 
-Later test timer-based pulse counting, then magnetic A/B quadrature encoders
-with a new pin plan. `HardwareTimer` has no encoder mode; that stage needs
-HAL or LL configuration. Pass only when measured turns in both directions
+Later test PIO-based pulse counting, then magnetic A/B quadrature encoders
+with a reviewed pin plan and an RP2350 PIO implementation. No STM32-specific
+HAL/LL encoder configuration belongs in this controller plan. Pass only when measured turns in both directions
 give the expected signed counts and a repeatable load test loses no counted
 pulses against a known reference. No such test or hardware exists yet.

@@ -6,11 +6,11 @@
 uint32_t counter = 0;
 
 void setup() {
-    // This board's Arduino core maps Serial to LPUART1, PA2 TX / PA3 RX.
-    // The default board routing connects it to the ST-LINK virtual COM port.
+    // Arduino-Pico maps Serial to the BB48's native USB serial connection.
+    // 115200 is the monitor setting; it does not clock the USB transport.
     Serial.begin(115200);
-    // USART1 on D1 PC4 TX / D0 PC5 RX is reserved for the later Radxa link.
-    // Leave it uninitialised here. This milestone only prints the counter.
+    // UART0 (Serial1) on GPIO0 TX / GPIO1 RX is reserved for the Radxa.
+    // Leave it and all motor/sensor pins uninitialised for this milestone.
     Serial.println("PLANNED MILESTONE 1: counter only, no sensor data");
 }
 

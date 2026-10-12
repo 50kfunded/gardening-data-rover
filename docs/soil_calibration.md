@@ -58,26 +58,26 @@ The version printed on the board is not enough to identify its circuit.
 
 ## Before connecting the ADC
 
-The proposed controller is NUCLEO-G474RE. About 3.25 V is an assumed ADC reference,
-not a measurement from this board. For a 12-bit conversion, the ideal step at
-that reference is `3.25 / 4096`, about 0.793 mV. More counts do not automatically
-mean better moisture accuracy.
+The proposed controller is base Olimex BB48, with soil on GPIO40/ADC0. Use
+12-bit reads later so raw data stays 0–4095. The nominal 3.3 V analog supply
+is not a measurement; check it on this board instead of carrying over the
+previous assumed 3.25 V reference. Counts aren't moisture accuracy.
+[Olimex schematic][bb48-schematic]
 
-The branded SEN0193 specifies a 3.3–5.5 V supply and 0–3.0 V output. Those limits
-are not proof that a generic v1.2 board has the same circuit.
-[SEN0193 specifications](https://wiki.dfrobot.com/sen0193/)
+SEN0193 specifies 3.3–5.5 V supply and 0–3.0 V output, but a generic v1.2
+module is not proved equivalent. Check supply, labels, air/water output and
+startup spikes with the ADC disconnected. Keep analog signals within measured
+reference/supply limits; never feed 5 V to this GPIO. [SEN0193](https://wiki.dfrobot.com/sen0193/)
 
-With the ADC disconnected, check the delivered sensor's supply requirement,
-pin labels and output in air and water. Check the actual reference on the
-Nucleo. The planned ADC signal must stay between ground and the measured
-reference. A meter will not show every startup spike, so use a scope if there
-is one available. Do not feed a 5 V analog signal into this ADC input. Do not
-bypass a regulator just because an online example does.
+Plan 100 nF from GPIO40 to GND near the ADC. Its loading/settling effect is
+untested. Record A2/A4 silicon and review A2 E9 input leakage and ADC pad
+input-buffer configuration. A4 fixes E9; it doesn't prove clean readings.
+[RP2350 errata][rp2350], [A4 announcement][a4]
 
-ADC reference stability, source impedance and sample time also affect the
-reading. I need to check these during the sensor milestone, including with
-motors stopped and then running. This change adds no ADC firmware or wiring.
-[ST AN2834](https://www.st.com/resource/en/application_note/an2834-how-to-optimize-the-adc-accuracy-in-the-stm32-mcus-stmicroelectronics.pdf)
+At the sensor milestone, compare settled batches with motors off/on, constant
+references, supply/cable and probe placement. Source impedance, reference
+stability and motor noise remain open checks. No ADC firmware is added by
+this documentation update.
 
 ## Air and water checks
 
@@ -298,3 +298,7 @@ Use one row per insertion, giving three rows per soil moisture level:
 
 Real sensor behaviour, insertion force, voltage limits, settling time, drift,
 soil calibration accuracy and performance with motors are all still untested.
+
+[bb48-schematic]: https://github.com/OLIMEX/RP2350-PICO2-BB48/blob/main/HARDWARE/RP2350-PICO2-BB48.REV.A/PICO2-BB48_Rev_A.pdf
+[rp2350]: https://pip-assets.raspberrypi.com/categories/1214-rp2350/documents/RP-008373-DS-2-rp2350-datasheet.pdf
+[a4]: https://www.raspberrypi.com/news/rp2350-a4-rp2354-and-a-new-hacking-challenge/
