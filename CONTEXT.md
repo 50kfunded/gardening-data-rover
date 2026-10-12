@@ -13,6 +13,9 @@ or tested on a board. Pure protocol functions pass native computer tests.
 The serial logger and command sender pass simulated loopback/fake-input tests.
 Real UART operation is untested. Camera code, PID, Kalman filtering and AI are
 not started. No hardware milestone has passed.
+Soil calibration helpers pass SIMULATED tests for a relative wetness index,
+filtering and fault warnings. The references, limits and insertion procedure
+remain planned and untested on hardware. See [the soil plan](docs/soil_calibration.md).
 
 The Radxa ZERO 3W has been bought for £44 including shipping. It has not been
 tested, and no rover has been built. The NUCLEO-G474RE was ordered on
@@ -25,7 +28,7 @@ parts are still planned, apart from the already-owned C920. See [the parts list]
 
 - `shared/data_format.py`: the 11-column schema and line parser.
 - `simulation/`: invented controller lines, file generation and pass/fail checks.
-- `analysis/`: reads and summarises the simulated files, with no AI inference.
+- `analysis/`: reads simulated files and checks planned soil calibration, with no AI inference.
 - `firmware/`: planned milestone 1 counter and pure protocol functions; hardware untested.
 - `pi/`: serial logger and commands; tested only with simulated input.
 - `hardware/`: proposed parts, wiring and mounting, all untested.

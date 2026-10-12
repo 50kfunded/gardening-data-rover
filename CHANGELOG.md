@@ -1,5 +1,14 @@
 # Changes
 
+## 2026-10-12: Soil calibration preparation
+
+- Added pure Python two-point calibration, filtering, fault warnings and a quality score.
+- Kept the percentage labelled as a relative wetness index, not measured soil water content.
+- Added tests using SIMULATED DATA with invented noise, drift and faults.
+- Added a sourced home calibration plan and a blank results template.
+- Kept raw telemetry, the T/D/STOP protocol and metadata schema unchanged.
+- Calibration and thresholds are planned and untested on hardware. No hardware milestone has passed.
+
 ## 2026-10-11: USB host power proposal
 
 - Added my proposed Radxa-host power fix for the Nucleo, with a hub for the C920.
