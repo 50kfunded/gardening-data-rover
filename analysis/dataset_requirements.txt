@@ -1,0 +1,2 @@
+# Optional private photo tooling and SIMULATED dataset tests; not the watering engine.
+Pillow>=12.3.0,<13

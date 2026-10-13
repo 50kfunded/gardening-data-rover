@@ -54,3 +54,16 @@ invented rain, irrigation, bed settings and a forecast stub. It makes no live
 API calls. The advisor keeps a mm bucket separate from learned relative-index
 limits, explains uncertainty and falls back to a finger check. It never runs
 a pump. See [the sourced watering plan](../docs/watering_advisor.md).
+
+## Planned private dataset checks
+
+`python3 -m analysis.dataset data/private/datasets/pilot_private` validates a
+separate private manifest, units, timestamps, photos and plant/date splits.
+Add `--sanitize` to create a new metadata-free PNG export after human privacy
+review; originals aren't changed. It never uploads or commits data.
+
+Install `analysis/dataset_requirements.txt` for Pillow before dataset work or
+the full analysis checks. The watering maths still has no heavy dependencies.
+Dataset tests generate SIMULATED pixels in temporary directories only.
+See [the dataset plan](../docs/dataset_plan.md) for the exact schema, weighing
+experiments, phone capture protocol, privacy limits and winter timeline.

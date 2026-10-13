@@ -27,6 +27,12 @@ sidecar. A mm bucket, earlier per-bed index limits and quality checks produce
 provisional suggestions or a finger-check fallback. It makes no live weather
 request or watering command. Bed capacity, plant thresholds, temperature
 compensation and useful advice remain unvalidated. [Watering plan](docs/watering_advisor.md)
+The private dataset plan now defines a separate version-1 manifest, plant/date
+holdouts, weighing/capture protocols and an indoor-winter timeline to P3.
+`analysis.dataset` validates private records and exports new photo copies
+without embedded location metadata; it needs Pillow and human scene review.
+Tests use generated SIMULATED pixels only. No real photos/dataset were added.
+[Dataset plan](docs/dataset_plan.md)
 Soil calibration helpers pass SIMULATED tests for a relative wetness index,
 filtering and fault warnings. The references, limits and insertion procedure
 remain planned and untested on hardware. See [the soil plan](docs/soil_calibration.md).

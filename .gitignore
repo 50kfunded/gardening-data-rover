@@ -3,6 +3,8 @@ runs/
 artifacts/
 data/*
 !data/sample/
+# private manifests, plant IDs, references and photos; only source code is shared
+data/private/
 *.csv
 !data/sample/**/*.csv
 *.parquet

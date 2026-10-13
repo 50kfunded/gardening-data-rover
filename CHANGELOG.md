@@ -1,5 +1,14 @@
 # Changes
 
+## 2026-10-13: Private dataset preparation
+
+- Defined a separate private dataset manifest with anonymous IDs, camera/distance/time, raw/relative soil values, weighed references, soil/air temperature, weather and separate appearance/treatment labels.
+- Added strict plant/date/visit holdouts, future-date blocks, a gitignored layout and indoor grow-light pots over winter before planned P2/P3 garden collection.
+- Added weighing, soil calibration and wide/mid/close phone protocols, with uncertainty and source links.
+- Added a private-folder validator and non-overwriting photo exporter: orientation/colour handling, fresh PNG pixels without embedded location metadata, preserved originals and human scene-review requirements.
+- Added tests using temporary generated SIMULATED images and invented records. No real photos, measurements, locations or personal details are committed.
+- Kept the telemetry data contract, run versions and T/D/STOP unchanged. Collection, experiments and hardware remain planned/untested; no hardware milestone has passed.
+
 ## 2026-10-13: Simulated watering advisor preparation
 
 - Added a pure Python daily bucket with rain, recorded irrigation, temperature-only ET and drainage, keeping mm estimates separate from relative probe readings.
