@@ -112,7 +112,7 @@ def _visits(observations, schedule, calibration, limits, reference):
 
 
 def analyse(observations, schedule, calibration, *, boundaries=(), thresholds=Thresholds(),
-            limits=Limits(), reference=None):
+            limits=Limits(), reference=None, watering_inputs=None):
     """One location/calibration only. All outputs stay labelled SIMULATED."""
     if schedule.batch_samples < limits.min_samples:
         raise ValueError("not enough samples per visit for the existing soil calibration")
@@ -268,7 +268,7 @@ def analyse(observations, schedule, calibration, *, boundaries=(), thresholds=Th
             result["ewma_moisture_pct"] = ewma
         results.append(result)
 
-    return {"analysis_format_version": 1, "data_source": "simulation", "status": STATUS,
+    output = {"analysis_format_version": 1, "data_source": "simulation", "status": STATUS,
             "notice": "SIMULATED DATA ONLY: planned analysis, not hardware or garden validation.",
             "start_utc": schedule.start.isoformat(), "end_utc": schedule.end.isoformat(),
             "location_scope": "one location and one calibration, selected by the operator",
@@ -276,3 +276,8 @@ def analyse(observations, schedule, calibration, *, boundaries=(), thresholds=Th
             "calibration": asdict(calibration), "soil_limits": asdict(limits),
             "reference_status": "unchecked" if reference is None else list(reference.flags),
             "days": results, "alerts": alerts}
+    if watering_inputs is not None:
+        from analysis.watering import advise_bed
+        profile, water_days = watering_inputs
+        output["watering"] = advise_bed(results, profile, water_days)
+    return output

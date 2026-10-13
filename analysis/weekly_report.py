@@ -9,6 +9,7 @@ from statistics import mean
 from analysis.engine import analyse
 from analysis.garden_runs import load_scenario
 from analysis.soil_calibration import Calibration
+from analysis.watering import load_inputs, weekly_watering_line
 
 
 def weekly_summaries(result, *, min_days=5):
@@ -56,6 +57,8 @@ def weekly_summaries(result, *, min_days=5):
                            else " Not enough data from last week for a drying comparison."))
         weekly_alerts = [item for item in result["alerts"] if week[0]["date"] <= item["date"] <= week[-1]["date"]]
         text.extend(["", "What to check"])
+        if "watering" in result:
+            text.append(weekly_watering_line(result["watering"], week[0]["date"], week[-1]["date"]))
         if weekly_alerts:
             for item in weekly_alerts:
                 text.append(f"- {item['date']}: {item['message']} Confidence: {item['confidence']['level']} "
@@ -66,7 +69,7 @@ def weekly_summaries(result, *, min_days=5):
             text.append("- Not enough data for every trend check: some daily baselines, coverage or drying intervals were missing.")
         text.extend(["- Keep the same location, depth and contact; repeat the dry/wet reference checks before trusting a shift.",
                      "- Check power, connectors and raw values if readings are flat, noisy or missing.", "",
-                     "These templates don't diagnose plants or decide watering. No hardware milestone has passed."])
+                     "These templates don't diagnose plants or control watering. Advice is provisional. No hardware milestone has passed."])
         reports.append("\n".join(text) + "\n")
     if not reports:
         reports.append("SIMULATED DATA ONLY. Planned/untested. Not enough data: no daily observations in the requested window.\n")
@@ -78,11 +81,14 @@ def main():
     parser.add_argument("scenario_folder", type=Path)
     parser.add_argument("--dry-raw", type=float, required=True)
     parser.add_argument("--wet-raw", type=float, required=True)
+    parser.add_argument("--watering-inputs", type=Path, help="explicit SIMULATED weather/bed sidecar; no live API calls")
     parser.add_argument("--output-dir", type=Path, help="new directory for analysis.json and weekly text; never overwrite")
     args = parser.parse_args()
     try:
         schedule, observations, boundaries = load_scenario(args.scenario_folder)
-        result = analyse(observations, schedule, Calibration(args.dry_raw, args.wet_raw), boundaries=boundaries)
+        watering = load_inputs(args.watering_inputs, schedule) if args.watering_inputs else None
+        result = analyse(observations, schedule, Calibration(args.dry_raw, args.wet_raw),
+                         boundaries=boundaries, watering_inputs=watering)
         reports = weekly_summaries(result)
         if args.output_dir:
             args.output_dir.mkdir(parents=True, exist_ok=False)

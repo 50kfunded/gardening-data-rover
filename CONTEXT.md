@@ -11,7 +11,7 @@ check passes too. Board setup (0) and hardware steps 1–8 are all pending.
 Milestone 1 USB counter firmware is prepared and builds, but is not uploaded
 or tested on a board. Pure protocol functions pass native computer tests.
 The serial logger and command sender pass simulated loopback/fake-input tests.
-Real UART operation is untested. Camera code, PID, Kalman filtering and AI are
+Real UART operation is untested. Camera processing, PID and Kalman filtering are
 not started. No hardware milestone has passed.
 The weekly engine now has a six-week SIMULATED fixture with daily cycles,
 rain-like events, slow drift, noise/stuck/spike/dropout faults and a split
@@ -22,6 +22,11 @@ rolling baselines, EWMA and CUSUM-style checks with confidence/insufficient-data
 notes and weekly templates. It never uses injected-event labels as evidence.
 All thresholds remain planned and untested on hardware; photo analysis is a
 documented TODO only. See [the analysis plan](docs/analysis_engine.md).
+The optional watering advisor reads a separate SIMULATED water/forecast
+sidecar. A mm bucket, earlier per-bed index limits and quality checks produce
+provisional suggestions or a finger-check fallback. It makes no live weather
+request or watering command. Bed capacity, plant thresholds, temperature
+compensation and useful advice remain unvalidated. [Watering plan](docs/watering_advisor.md)
 Soil calibration helpers pass SIMULATED tests for a relative wetness index,
 filtering and fault warnings. The references, limits and insertion procedure
 remain planned and untested on hardware. See [the soil plan](docs/soil_calibration.md).

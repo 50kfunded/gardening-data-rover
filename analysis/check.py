@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Computer checks of SIMULATED soil and weekly data. No hardware is tested."""
+"""Computer checks of SIMULATED soil, weekly and watering data. No hardware."""
 
 import unittest
 from pathlib import Path
@@ -13,7 +13,7 @@ def main():
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if not result.wasSuccessful():
         raise SystemExit(1)
-    print("PASS: simulated soil/weekly checks only. Rules, calibration and hardware remain untested.")
+    print("PASS: simulated soil/weekly/watering checks only. Rules, calibration and hardware remain untested.")
 
 
 if __name__ == "__main__":

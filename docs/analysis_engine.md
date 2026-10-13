@@ -259,7 +259,9 @@ honestly when a comparison isn't available.
 The templates contain "what changed" and "what to check", with confidence
 and limitations next to each alert. They suggest checking raw values,
 connectors, power, probe contact and repeat references. They don't send a
-notification, run a pump, decide watering or infer a plant diagnosis.
+notification, run a pump or infer a plant diagnosis. An optional, separate
+[watering advisor](watering_advisor.md) now adds provisional suggestions with
+finger-check fallbacks; it is tested only on SIMULATED data.
 Humidity levels are shown as percent relative humidity; their week-to-week
 differences are percentage points.
 

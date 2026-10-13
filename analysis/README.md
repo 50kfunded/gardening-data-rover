@@ -43,5 +43,14 @@ It doesn't read injected-fault labels to decide alerts.
 
 The [analysis plan](../docs/analysis_engine.md) explains the maths, proposed
 thresholds, fictional clock sidecar and limitations. Real runs, multiple soil
-locations, watering decisions and photo analysis remain unimplemented or
+locations and photo analysis remain unimplemented or
 unvalidated. No hardware milestone has passed.
+
+## Planned watering suggestions
+
+The weekly command accepts `--watering-inputs runs/garden_sim/watering_inputs.json`
+after generating a new six-week fixture. This explicit SIMULATED sidecar has
+invented rain, irrigation, bed settings and a forecast stub. It makes no live
+API calls. The advisor keeps a mm bucket separate from learned relative-index
+limits, explains uncertainty and falls back to a finger check. It never runs
+a pump. See [the sourced watering plan](../docs/watering_advisor.md).

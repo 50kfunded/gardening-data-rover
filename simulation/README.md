@@ -47,3 +47,10 @@ The new output directory must not already exist. The `3000`/`1000` calibration
 endpoints are fake fixture values, not settings for the planned hardware.
 See [the analysis plan](../docs/analysis_engine.md) for events, maths and open
 checks. A passing simulation doesn't pass a hardware milestone.
+
+New fixtures also include invented irrigation events and a separate
+`watering_inputs.json` with SIMULATED rain/irrigation amounts, a fictional bed
+profile and a next-day forecast stub (including a false forecast). Use the
+weekly command's `--watering-inputs` option to exercise the planned advisor.
+The weather inputs are separate from injected-fault truth and run metadata;
+no live API is called. See [watering assumptions](../docs/watering_advisor.md).

@@ -25,6 +25,7 @@ class GardenConfig:
     faults: bool = True
     changes: bool = True
     rain_days: tuple[int, ...] = (3, 10, 17, 28, 35)
+    irrigation_days: tuple[int, ...] = (5, 12, 19, 33, 40)
 
     def __post_init__(self):
         if isinstance(self.weeks, bool) or not isinstance(self.weeks, int) or not 1 <= self.weeks <= 12:
@@ -38,8 +39,9 @@ class GardenConfig:
             raise ValueError("drift must be finite and at most 20 counts/day in magnitude")
         if not isinstance(self.faults, bool) or not isinstance(self.changes, bool):
             raise ValueError("faults and changes must be booleans")
-        if any(isinstance(day, bool) or not isinstance(day, int) or day < 0 for day in self.rain_days):
-            raise ValueError("rain days must be non-negative integer day offsets")
+        if any(isinstance(day, bool) or not isinstance(day, int) or day < 0
+               for day in (*self.rain_days, *self.irrigation_days)):
+            raise ValueError("water-event days must be non-negative integer day offsets")
 
 
 def garden_batches(config=GardenConfig()):
@@ -71,6 +73,9 @@ def garden_batches(config=GardenConfig()):
             if raining:
                 moisture = min(98, moisture + 18)
                 labels.append("rain_event")
+            if day in config.irrigation_days and hour >= 5:
+                moisture = min(98, moisture + 12)
+                labels.append("irrigation_event")
             temp = 18 + 6 * math.sin((hour - 8) * math.tau / 24) + 0.04 * day
             humidity = 65 - 15 * math.sin((hour - 8) * math.tau / 24) + (12 if raining else 0)
             raw_centre = 3000 - 20 * moisture + day * config.drift_counts_per_day
@@ -178,6 +183,24 @@ def write_garden(output_dir, config=GardenConfig()):
         rows.extend(batch)
     save()
     (root / "scenario.json").write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    # Operational water records are separate from injected-fault ground truth.
+    # Amounts, capacity and location are invented; they are not real settings.
+    water = {"watering_input_version": 1, "data_source": "simulation", "hardware_status": "untested",
+             "notice": NOTICE, "profile": {"bed_id": "bed_sim", "latitude_deg": 52.0,
+             "capacity_mm": 40.0, "initial_storage_mm": 32.0, "crop_kc": 1.0,
+             "allowed_depletion": 0.35}, "days": {}}
+    for day in range(config.weeks * 7):
+        at = start + timedelta(days=day)
+        tomorrow = day + 1
+        water["days"][at.date().isoformat()] = {
+            "rain_mm": 10.0 if day in config.rain_days else 0.0,
+            "irrigation_mm": 8.0 if day in config.irrigation_days else 0.0,
+            "forecast": {"source": "SIMULATED forecast stub, no API",
+                         "issued_at_utc": (at + timedelta(hours=18)).isoformat(),
+                         "for_date": (at + timedelta(days=1)).date().isoformat(),
+                         "rain_mm": 8.0 if tomorrow in config.rain_days else (5.0 if day == 8 else 0.0),
+                         "probability": 0.8 if tomorrow in config.rain_days or day == 8 else 0.1}}
+    (root / "watering_inputs.json").write_text(json.dumps(water, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     return root
 
 

@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-13: Simulated watering advisor preparation
+
+- Added a pure Python daily bucket with rain, recorded irrigation, temperature-only ET and drainage, keeping mm estimates separate from relative probe readings.
+- Added earlier per-bed wet/dry range proposals, quality/confidence checks, forecast freshness checks and finger-check fallbacks. No pump commands or live weather calls.
+- Extended the six-week SIMULATED fixture with irrigation and a separate weather/forecast stub, including a false rain prediction; kept fault truth out of advice.
+- Added a weekly watering line, sourced maths/assumptions and simulated tests. Sensor compensation, real bed limits and useful watering advice remain planned and unvalidated.
+- Kept the telemetry data contract, run schema versions and T/D/STOP unchanged. No hardware milestone has passed.
+
 ## 2026-10-13: Simulated weekly analysis preparation
 
 - Added several fictional garden weeks with hourly 10 Hz bursts, daily soil cycles, rain-like events, slow sensor drift, stuck/noisy signals, spikes, dropouts, missing visits and a split controller reboot.
