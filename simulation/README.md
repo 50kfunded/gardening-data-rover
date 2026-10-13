@@ -24,3 +24,26 @@ New CSV files start with a `# SIMULATED DATA: ...` notice, then the 11-column he
 Metadata has `data_source: simulation` and `csv_format_version: 2`. Older local
 S0 runs without that notice still work when their simulation metadata is present;
 the checker prints a legacy warning. Keep those files together.
+
+## Several invented garden weeks
+
+```powershell
+python3 -m simulation.garden --output-dir runs/garden_sim --weeks 6 --seed 42
+python3 -m analysis.weekly_report runs/garden_sim --dry-raw 3000 --wet-raw 1000
+python3 -m analysis.check
+```
+
+This separate fixture makes hourly visits with nine 10 Hz samples each,
+daily soil cycles, rain-like wetting, slow ADC drift, spikes, a stuck/noisy
+signal, dropouts, missing visits and a controller reboot. It generates
+immediately. All readings, references, dates and faults are SIMULATED.
+
+It keeps the existing telemetry and metadata versions. `scenario.json` is a
+separate, labelled artifact for the fictional observation dates and visit
+schedule; metadata dates still describe generation. Reset run parts stay
+separate. The original 30-second S0 check stays unchanged.
+
+The new output directory must not already exist. The `3000`/`1000` calibration
+endpoints are fake fixture values, not settings for the planned hardware.
+See [the analysis plan](../docs/analysis_engine.md) for events, maths and open
+checks. A passing simulation doesn't pass a hardware milestone.

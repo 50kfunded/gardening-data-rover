@@ -1,5 +1,15 @@
 # Changes
 
+## 2026-10-13: Simulated weekly analysis preparation
+
+- Added several fictional garden weeks with hourly 10 Hz bursts, daily soil cycles, rain-like events, slow sensor drift, stuck/noisy signals, spikes, dropouts, missing visits and a split controller reboot.
+- Kept all run columns, T/D/STOP and telemetry/metadata versions unchanged. Put invented observation dates and the visit schedule in a separate SIMULATED scenario artifact.
+- Added daily soil/temperature/humidity summaries, drying slopes, prior-day rolling baselines, EWMA and a CUSUM-style shift rule, reusing the existing soil calibration.
+- Added explainable alerts with evidence scores, limitations and "not enough data" handling. A flat signal is only possibly stuck until a controlled challenge confirms it.
+- Added plain weekly templates and a documented photo-analysis TODO. No photo-analysis result or plant diagnosis is generated.
+- Added computer tests for the invented weeks and faults. Rules, thresholds and hardware remain planned and untested; no hardware milestone has passed.
+- Logger checks (18 tests), the unchanged S0 simulation checks and analysis checks (52 tests, including 32 new weekly tests) passed on the computer only, without `-I`.
+
 ## 2026-10-13: Pull-down proposal and cancelled order note
 
 - Changed the seven proposed TB6612 input pull-downs to 4.7 kΩ, ±5% or better, across the parts, wiring and related docs.

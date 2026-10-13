@@ -15,6 +15,10 @@ S0 passed on 9 October 2026 with 300 invented rows. That checks parsing/files,
 not motors, sensors, UART or real timing. **All example readings and the
 committed sample are SIMULATED DATA**, invented on a computer.
 
+The weekly analysis engine now has computer tests for invented garden weeks,
+daily summaries, drying trends and explainable alerts. Its thresholds and
+calibration remain planned and untested on hardware. [Analysis plan](docs/analysis_engine.md)
+
 ## The data format
 
 One run has `meta.json`, `telemetry.csv` and a `photos/` folder.
@@ -87,6 +91,22 @@ python -m analysis.inspect_run data/sample/example_sim
 
 Legacy CSV format 1 is supported only when simulation metadata accompanies it.
 The checker warns when the standalone simulation notice is absent.
+
+## Trying the weekly summaries
+
+```powershell
+python3 -m simulation.garden --output-dir runs/garden_sim --weeks 6 --seed 42
+python3 -m analysis.weekly_report runs/garden_sim --dry-raw 3000 --wet-raw 1000 --output-dir artifacts/weekly_sim
+python3 -m analysis.check
+```
+
+Use new output directories. These make six fictional weeks and template
+summaries of one invented soil location. The calibration values are fake,
+not hardware defaults. Rain, drift and faults are injected; the analysis
+reads the values rather than those truth labels. Missing data isn't filled
+in. Every alert has a confidence level and a limitation, and summaries say
+when there isn't enough data. All of this remains SIMULATED and hardware
+untested; photo analysis is a documented future TODO only.
 
 ## Software ready for the parts
 
@@ -185,7 +205,7 @@ track the build. [Release notes](docs/releases.md) explain tagging after a pass.
 | `pi/` | Serial logger and command sender, tested only with simulated input |
 | `shared/` | Telemetry contract for simulation and the future logger |
 | `simulation/` | Simulated controller, run generator, verifier and one-command check |
-| `analysis/` | Reads and summarises simulated saved files; no AI yet |
+| `analysis/` | Soil calibration and daily/weekly rules/templates, tested only with SIMULATED data |
 | `hardware/` | Proposed parts and wiring |
 | `data/sample/` | Small, clearly labelled simulated example |
 | `docs/` | Plans, data contract and preparation notes |

@@ -13,6 +13,15 @@ or tested on a board. Pure protocol functions pass native computer tests.
 The serial logger and command sender pass simulated loopback/fake-input tests.
 Real UART operation is untested. Camera code, PID, Kalman filtering and AI are
 not started. No hardware milestone has passed.
+The weekly engine now has a six-week SIMULATED fixture with daily cycles,
+rain-like events, slow drift, noise/stuck/spike/dropout faults and a split
+controller reboot. It keeps the telemetry/metadata versions unchanged.
+Fictional observation dates live in a separate `scenario.json`; generation
+dates keep their existing meaning. Analysis uses one location/calibration,
+rolling baselines, EWMA and CUSUM-style checks with confidence/insufficient-data
+notes and weekly templates. It never uses injected-event labels as evidence.
+All thresholds remain planned and untested on hardware; photo analysis is a
+documented TODO only. See [the analysis plan](docs/analysis_engine.md).
 Soil calibration helpers pass SIMULATED tests for a relative wetness index,
 filtering and fault warnings. The references, limits and insertion procedure
 remain planned and untested on hardware. See [the soil plan](docs/soil_calibration.md).
@@ -27,7 +36,7 @@ already owned. No rover is assembled. See [parts](hardware/parts.md) and
 
 - `shared/data_format.py`: the 11-column schema and line parser.
 - `simulation/`: invented controller lines, file generation and pass/fail checks.
-- `analysis/`: reads simulated files and checks planned soil calibration, with no AI inference.
+- `analysis/`: reads simulated files, calibrates soil batches and produces daily/weekly rules and template summaries.
 - `firmware/`: planned milestone 1 counter and pure protocol functions; hardware untested.
 - `pi/`: serial logger and commands; tested only with simulated input.
 - `hardware/`: proposed parts, wiring and mounting, all untested.
